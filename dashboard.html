@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>UniBuzz — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { background: #0a0a0a; color: #fff; font-family: 'Poppins', sans-serif; padding-bottom: 30px; }
+  .header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(255, 215, 0, 0.15); background: #0f0f0f; position: sticky; top: 0; z-index: 10; }
+  .logo-text { font-weight: 800; font-size: 1.4rem; letter-spacing: -0.5px; }
+  .logo-text .uni { color: #fff; }
+  .logo-text .buzz { color: #FFD700; }
+  .logout-btn { background: transparent; border: 1px solid #FFD700; color: #FFD700; padding: 8px 16px; border-radius: 50px; font-weight: 600; font-size: 0.8rem; cursor: pointer; }
+  .logout-btn:active { background: #FFD700; color: #000; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  .welcome { padding: 24px 20px 10px; display: flex; justify-content: space-between; align-items: center; }
+  .welcome-text h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+  .welcome-text h1 span { color: #FFD700; }
+  .welcome-text p { color: #888; font-size: 0.9rem; }
+  .avatar-btn { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid rgba(255, 215, 0, 0.3); flex-shrink: 0; }
+
+  .section-title { padding: 20px 20px 10px; font-size: 1.1rem; font-weight: 700; color: #FFD700; display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+  .section-title .view-all { font-size: 0.75rem; color: #FFD700; cursor: pointer; font-weight: 600; opacity: 0.8; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 0 20px; }
+  .card { background: #151515; border: 1px solid #262626; border-radius: 18px; padding: 20px 16px; cursor: pointer; transition: transform 0.15s, border 0.2s; }
+  .card:active { transform: scale(0.97); }
+  .card.admin-card { border-color: rgba(255, 215, 0, 0.5); background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.05)); }
+  .card.vendor-card { border-color: rgba(80, 220, 120, 0.5); background: linear-gradient(135deg, rgba(80, 220, 120, 0.1), rgba(80, 220, 120, 0.02)); }
+  .card.community-card { border-color: rgba(168, 85, 247, 0.5); background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(168, 85, 247, 0.02)); }
+  .card.profile-card { border-color: rgba(74, 158, 255, 0.5); background: linear-gradient(135deg, rgba(74, 158, 255, 0.1), rgba(74, 158, 255, 0.02)); }
+  .card.fresher-card-main { border-color: rgba(255, 215, 0, 0.5); background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 165, 0, 0.02)); }
+  .card.announce-card { border-color: rgba(244, 63, 94, 0.5); background: linear-gradient(135deg, rgba(244, 63, 94, 0.08), rgba(244, 63, 94, 0.02)); }
+  .card .icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+  .card .title { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+  .card .desc { color: #777; font-size: 0.75rem; line-height: 1.3; }
+
+  /* ANNOUNCEMENTS on dashboard */
+  .ann-strip { padding: 10px 20px 0; }
+  .ann-strip-item { background: linear-gradient(135deg, rgba(244, 63, 94, 0.1), rgba(244, 63, 94, 0.02)); border: 1px solid rgba(244, 63, 94, 0.3); border-left: 4px solid #F43F5E; border-radius: 14px; padding: 14px; margin-bottom: 10px; cursor: pointer; }
+  .ann-strip-item .ast-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 10px; }
+  .ann-strip-item .ast-cat { font-size: 0.6rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; background: rgba(244, 63, 94, 0.2); color: #F43F5E; }
+  .ann-strip-item .ast-date { font-size: 0.65rem; color: #666; }
+  .ann-strip-item h4 { font-size: 0.9rem; font-weight: 700; color: #fff; line-height: 1.3; }
+  .ann-strip-item.pinned { border-left-color: #FFD700; background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.02)); }
+  .ann-strip-item.pinned .ast-cat { background: rgba(255, 215, 0, 0.2); color: #FFD700; }
+
+  .course-list { padding: 0 20px; margin-top: 10px; }
+  .course-item { background: #151515; border: 1px solid #262626; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+  .course-item .info h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
+  .course-item .info p { font-size: 0.75rem; color: #888; }
+  .course-item .units { background: rgba(255, 215, 0, 0.15); color: #FFD700; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+  .message { margin: 20px; padding: 14px; background: rgba(255, 215, 0, 0.1); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 12px; color: #FFD700; font-size: 0.85rem; text-align: center; }
+
+  .back-btn { background: transparent; border: none; color: #FFD700; font-size: 1.4rem; cursor: pointer; font-weight: 700; padding: 4px; }
+  .inner-toggle { display: flex; gap: 10px; padding: 20px 20px 10px; }
+  .toggle-btn { flex: 1; padding: 12px; border-radius: 12px; background: #151515; border: 1px solid #262626; color: #888; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+  .toggle-btn.active { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; border-color: #FFD700; }
+
+  .hero { padding: 10px 20px 10px; }
+  .hero h1 { font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; }
+  .hero h1 span { color: #FFD700; }
+  .hero p { color: #888; font-size: 0.9rem; }
+
+  .upload-btn { display: block; margin: 16px 20px 20px; padding: 16px; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; font-family: 'Poppins', sans-serif; cursor: pointer; text-align: center; box-shadow: 0 0 25px rgba(255, 215, 0, 0.4); width: calc(100% - 40px); }
+
+  .search-wrap { padding: 0 20px 10px; }
+  .search-wrap input { width: 100%; padding: 14px 18px; background: #151515; border: 1px solid #262626; border-radius: 12px; color: #fff; font-size: 0.95rem; font-family: 'Poppins', sans-serif; outline: none; }
+
+  .materials-list { padding: 10px 20px; }
+  .material-item { background: #151515; border: 1px solid #262626; border-radius: 16px; padding: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .material-item.pending { border-color: rgba(255, 165, 0, 0.4); background: linear-gradient(135deg, rgba(255, 165, 0, 0.05), transparent); }
+  .material-info { flex: 1; min-width: 0; }
+  .material-info h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .material-info .course { font-size: 0.8rem; color: #FFD700; font-weight: 600; margin-bottom: 2px; }
+  .material-info .meta { font-size: 0.7rem; color: #666; }
+  .material-info .status-badge { display: inline-block; font-size: 0.65rem; font-weight: 700; padding: 3px 8px; border-radius: 8px; margin-top: 6px; text-transform: uppercase; }
+  .status-badge.pending { background: rgba(255, 165, 0, 0.2); color: #FFA500; }
+  .status-badge.approved { background: rgba(80, 220, 120, 0.2); color: #4ade80; }
+  .download-btn { background: rgba(255, 215, 0, 0.15); color: #FFD700; border: 1px solid rgba(255, 215, 0, 0.4); padding: 10px 14px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer; white-space: nowrap; text-decoration: none; display: inline-block; }
+
+  .admin-actions { display: flex; gap: 6px; }
+  .admin-btn { padding: 8px 12px; border-radius: 8px; font-weight: 700; font-size: 0.75rem; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; }
+  .admin-btn.approve { background: #4ade80; color: #000; }
+  .admin-btn.reject { background: #ff6b6b; color: #fff; }
+
+  .empty { text-align: center; padding: 40px 20px; color: #666; }
+  .empty .icon { font-size: 3rem; margin-bottom: 10px; }
+
+  .empty-spots { text-align: center; padding: 40px 20px 30px; }
+  .empty-spots .es-icon { font-size: 3.5rem; margin-bottom: 16px; display: inline-block; }
+  .empty-spots h3 { font-size: 1.15rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .empty-spots p { font-size: 0.85rem; color: #888; line-height: 1.5; margin-bottom: 20px; max-width: 300px; margin-left: auto; margin-right: auto; }
+  .empty-spots .es-btn { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; padding: 14px 24px; border: none; border-radius: 50px; font-weight: 800; font-size: 0.9rem; font-family: 'Poppins', sans-serif; cursor: pointer; }
+
+  .timetable-list { padding: 10px 20px; }
+  .timetable-item { background: #151515; border: 1px solid #262626; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; gap: 14px; align-items: flex-start; }
+  .day-badge { background: rgba(255, 215, 0, 0.15); color: #FFD700; font-weight: 700; font-size: 0.75rem; padding: 6px 10px; border-radius: 8px; min-width: 70px; text-align: center; text-transform: uppercase; }
+  .class-info { flex: 1; }
+  .class-info h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; color: #fff; }
+  .class-info .time { font-size: 0.85rem; color: #FFD700; font-weight: 600; margin-bottom: 2px; }
+  .class-info .venue { font-size: 0.8rem; color: #888; }
+
+  .filter-wrap { padding: 0 20px 14px; display: flex; gap: 8px; overflow-x: auto; }
+  .filter-wrap::-webkit-scrollbar { display: none; }
+  .filter-btn { background: #151515; border: 1px solid #262626; color: #888; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .filter-btn.active { background: #FFD700; color: #000; border-color: #FFD700; }
+
+  .spots-hero { padding: 32px 20px 24px; background: linear-gradient(180deg, rgba(255, 215, 0, 0.08) 0%, transparent 100%); }
+  .spots-hero .script { font-family: 'Caveat', cursive; color: #FFD700; font-size: 1.2rem; margin-bottom: 4px; display: inline-block; }
+  .spots-hero h1 { font-size: 2.2rem; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
+  .spots-hero h1 .uni { color: #fff; }
+  .spots-hero h1 .buzz { color: #FFD700; }
+  .spots-hero .subtitle { color: #ccc; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; max-width: 90%; }
+  .features-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+  .features-row::-webkit-scrollbar { display: none; }
+  .feature-badge { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 78px; padding: 10px 8px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; }
+  .feature-badge .fb-icon { font-size: 1.2rem; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: rgba(255, 215, 0, 0.12); border-radius: 10px; }
+  .feature-badge .fb-label { font-size: 0.65rem; font-weight: 600; color: #ccc; text-align: center; line-height: 1.2; }
+
+  .cat-cards-row { display: flex; gap: 12px; overflow-x: auto; padding: 20px; }
+  .cat-cards-row::-webkit-scrollbar { display: none; }
+  .cat-card { flex-shrink: 0; width: 110px; background: #151515; border: 1px solid #262626; border-radius: 18px; padding: 16px 12px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .cat-card.selected { border-color: #FFD700; background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.03)); }
+  .cat-card .cat-icon-box { width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 1.3rem; }
+  .cat-card[data-cat="Food"] .cat-icon-box { background: rgba(255, 107, 53, 0.2); }
+  .cat-card[data-cat="Laundry"] .cat-icon-box { background: rgba(74, 158, 255, 0.2); }
+  .cat-card[data-cat="Printing"] .cat-icon-box { background: rgba(168, 85, 247, 0.2); }
+  .cat-card[data-cat="Accommodation"] .cat-icon-box { background: rgba(16, 185, 129, 0.2); }
+  .cat-card[data-cat="Transport"] .cat-icon-box { background: rgba(244, 63, 94, 0.2); }
+  .cat-card .cat-label { font-size: 0.8rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 4px; }
+  .cat-card .cat-label .arrow { color: #FFD700; font-size: 0.9rem; }
+
+  .spots-section-title { padding: 20px 20px 6px; display: flex; align-items: center; gap: 10px; }
+  .spots-section-title .pin-icon { font-size: 1.4rem; }
+  .spots-section-title h2 { font-size: 1.4rem; font-weight: 800; color: #FFD700; }
+  .spots-subtitle { padding: 0 20px 16px; font-size: 0.85rem; color: #888; }
+
+  .spots-container { padding: 0 20px 30px; }
+  .spot-card { display: flex; gap: 14px; background: #131313; border: 1px solid #262626; border-radius: 20px; padding: 14px; margin-bottom: 14px; }
+  .spot-image { width: 100px; height: 130px; flex-shrink: 0; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; overflow: hidden; }
+  .spot-image img { width: 100%; height: 100%; object-fit: cover; }
+  .spot-image[data-cat="Food"] { background: linear-gradient(135deg, #FF6B35, #B23A0A); }
+  .spot-image[data-cat="Laundry"] { background: linear-gradient(135deg, #4A9EFF, #1E5FCA); }
+  .spot-image[data-cat="Printing"] { background: linear-gradient(135deg, #A855F7, #6D28D9); }
+  .spot-image[data-cat="Accommodation"] { background: linear-gradient(135deg, #10B981, #047857); }
+  .spot-image[data-cat="Transport"] { background: linear-gradient(135deg, #F43F5E, #9F1239); }
+  .spot-body { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: space-between; }
+  .spot-header-line { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .spot-cat-icon { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: rgba(255, 215, 0, 0.15); border-radius: 8px; font-size: 0.9rem; flex-shrink: 0; }
+  .spot-name-cat { flex: 1; min-width: 0; }
+  .spot-name-cat h3 { font-size: 1rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 2px; }
+  .spot-name-cat .cat-text { font-size: 0.75rem; color: #FFD700; font-weight: 600; }
+  .spot-desc { font-size: 0.78rem; color: #999; line-height: 1.4; margin-bottom: 10px; }
+  .spot-info-row { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: #ccc; margin-bottom: 4px; }
+  .spot-price-pill { display: inline-flex; align-items: center; gap: 6px; background: #FFD700; color: #000; font-weight: 800; font-size: 0.78rem; padding: 6px 12px; border-radius: 20px; margin-top: 8px; align-self: flex-start; }
+
+  .cta-banner { margin: 20px 20px 30px; padding: 18px 20px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 165, 0, 0.05)); border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 20px; display: flex; align-items: center; gap: 14px; }
+  .cta-banner .cta-icon { font-size: 1.8rem; }
+  .cta-banner .cta-text { flex: 1; }
+  .cta-banner .cta-text h4 { font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .cta-banner .cta-text p { font-size: 0.8rem; color: #FFD700; font-weight: 700; }
+  .cta-banner button { background: #FFD700; color: #000; border: none; padding: 10px 16px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; font-family: 'Poppins', sans-serif; cursor: pointer; }
+
+  .community-hero { padding: 32px 20px 20px; background: linear-gradient(180deg, rgba(168, 85, 247, 0.1) 0%, transparent 100%); }
+  .community-hero .script { font-family: 'Caveat', cursive; color: #A855F7; font-size: 1.2rem; margin-bottom: 4px; display: inline-block; }
+  .community-hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
+  .community-hero h1 .purple { color: #A855F7; }
+  .community-hero p { color: #ccc; font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px; }
+  .community-tabs { display: flex; gap: 8px; padding: 0 20px 14px; overflow-x: auto; }
+  .community-tabs::-webkit-scrollbar { display: none; }
+  .comm-tab { background: #151515; border: 1px solid #262626; color: #888; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .comm-tab.active { background: #A855F7; color: #fff; border-color: #A855F7; }
+  .posts-list { padding: 10px 20px; }
+  .post-card { background: #131313; border: 1px solid #262626; border-radius: 18px; padding: 18px; margin-bottom: 12px; cursor: pointer; }
+  .post-card[data-cat="Study Group"] { border-left: 4px solid #4A9EFF; }
+  .post-card[data-cat="Lost & Found"] { border-left: 4px solid #F43F5E; }
+  .post-card[data-cat="Question"] { border-left: 4px solid #FFD700; }
+  .post-card[data-cat="General"] { border-left: 4px solid #A855F7; }
+  .post-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .post-cat { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
+  .post-cat[data-cat="Study Group"] { background: rgba(74, 158, 255, 0.15); color: #4A9EFF; }
+  .post-cat[data-cat="Lost & Found"] { background: rgba(244, 63, 94, 0.15); color: #F43F5E; }
+  .post-cat[data-cat="Question"] { background: rgba(255, 215, 0, 0.15); color: #FFD700; }
+  .post-cat[data-cat="General"] { background: rgba(168, 85, 247, 0.15); color: #A855F7; }
+  .post-card h3 { font-size: 0.98rem; font-weight: 700; color: #fff; margin-bottom: 6px; line-height: 1.3; }
+  .post-card .post-body-preview { font-size: 0.82rem; color: #999; line-height: 1.5; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .post-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: #666; }
+  .post-meta .author { color: #A855F7; font-weight: 600; }
+
+  /* ANNOUNCEMENTS view */
+  .ann-hero { padding: 32px 20px 20px; background: linear-gradient(180deg, rgba(244, 63, 94, 0.1) 0%, transparent 100%); }
+  .ann-hero .script { font-family: 'Caveat', cursive; color: #F43F5E; font-size: 1.2rem; margin-bottom: 4px; display: inline-block; }
+  .ann-hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
+  .ann-hero h1 .red { color: #F43F5E; }
+  .ann-hero p { color: #ccc; font-size: 0.9rem; line-height: 1.5; }
+
+  .ann-list { padding: 10px 20px; }
+  .ann-card { background: #131313; border: 1px solid #262626; border-radius: 18px; padding: 18px; margin-bottom: 14px; }
+  .ann-card.pinned { border-color: rgba(255, 215, 0, 0.4); background: linear-gradient(135deg, rgba(255, 215, 0, 0.05), transparent); }
+  .ann-card[data-cat="General"] { border-left: 4px solid #4A9EFF; }
+  .ann-card[data-cat="Academic"] { border-left: 4px solid #FFD700; }
+  .ann-card[data-cat="Events"] { border-left: 4px solid #A855F7; }
+  .ann-card[data-cat="Urgent"] { border-left: 4px solid #F43F5E; }
+  .ann-card[data-cat="Sports"] { border-left: 4px solid #4ade80; }
+  .ann-card.pinned { border-left-color: #FFD700; }
+
+  .ann-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .ann-cat { font-size: 0.6rem; font-weight: 800; padding: 4px 10px; border-radius: 8px; text-transform: uppercase; }
+  .ann-cat[data-cat="General"] { background: rgba(74, 158, 255, 0.15); color: #4A9EFF; }
+  .ann-cat[data-cat="Academic"] { background: rgba(255, 215, 0, 0.15); color: #FFD700; }
+  .ann-cat[data-cat="Events"] { background: rgba(168, 85, 247, 0.15); color: #A855F7; }
+  .ann-cat[data-cat="Urgent"] { background: rgba(244, 63, 94, 0.15); color: #F43F5E; }
+  .ann-cat[data-cat="Sports"] { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+  .ann-date { font-size: 0.65rem; color: #666; }
+  .ann-card h3 { font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.3; margin-bottom: 8px; }
+  .ann-card .ann-body { font-size: 0.85rem; color: #ccc; line-height: 1.55; margin-bottom: 10px; white-space: pre-wrap; }
+  .ann-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: #666; }
+  .ann-meta .ann-author { color: #FFD700; font-weight: 600; }
+  .ann-pin-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; background: rgba(255, 215, 0, 0.15); color: #FFD700; padding: 3px 8px; border-radius: 6px; font-weight: 700; }
+
+  /* FRESHER GUIDE */
+  .fresher-hero { padding: 32px 20px 24px; background: linear-gradient(180deg, rgba(255, 215, 0, 0.1) 0%, transparent 100%); }
+  .fresher-hero .script { font-family: 'Caveat', cursive; color: #FFD700; font-size: 1.2rem; margin-bottom: 4px; display: inline-block; }
+  .fresher-hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
+  .fresher-hero h1 .gold { color: #FFD700; }
+  .fresher-hero p { color: #ccc; font-size: 0.9rem; line-height: 1.5; }
+
+  .fresher-cards { padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .fresher-card { background: #131313; border: 1px solid #262626; border-radius: 18px; padding: 20px 14px; cursor: pointer; text-align: center; }
+  .fresher-card .fc-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
+  .fresher-card .fc-title { font-size: 0.85rem; font-weight: 700; color: #fff; line-height: 1.3; }
+  .fresher-card .fc-count { font-size: 0.7rem; color: #FFD700; margin-top: 4px; font-weight: 600; }
+
+  .fresher-section-title { padding: 24px 20px 12px; }
+  .fresher-section-title .fs-icon { font-size: 2.5rem; margin-bottom: 8px; display: block; }
+  .fresher-section-title h2 { font-size: 1.5rem; font-weight: 800; color: #FFD700; margin-bottom: 6px; }
+  .fresher-section-title p { color: #888; font-size: 0.85rem; }
+  .fresher-detail-wrap { padding: 0 20px 30px; }
+  .fresher-tip { background: #131313; border: 1px solid #262626; border-left: 3px solid #FFD700; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .fresher-tip h3 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .fresher-tip p { font-size: 0.85rem; color: #ccc; line-height: 1.5; }
+
+  /* PROFILE */
+  .profile-header-card { margin: 20px; padding: 24px; background: linear-gradient(135deg, rgba(74, 158, 255, 0.12), rgba(74, 158, 255, 0.03)); border: 1px solid rgba(74, 158, 255, 0.3); border-radius: 20px; text-align: center; }
+  .profile-avatar-lg { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-weight: 800; font-size: 2rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; border: 3px solid rgba(255, 215, 0, 0.3); }
+  .profile-header-card h2 { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+  .profile-header-card .p-email { font-size: 0.8rem; color: #888; margin-bottom: 10px; }
+  .profile-header-card .p-badges { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; }
+  .badge.admin { background: rgba(255, 215, 0, 0.2); color: #FFD700; }
+  .badge.vendor { background: rgba(80, 220, 120, 0.2); color: #4ade80; }
+
+  .profile-form { padding: 0 20px 20px; }
+  .pf-section { background: #111; border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; padding: 18px; margin-bottom: 14px; }
+  .pf-section h3 { font-size: 0.9rem; font-weight: 800; color: #FFD700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .pf-group { margin-bottom: 14px; }
+  .pf-group:last-child { margin-bottom: 0; }
+  .profile-form label { display: block; font-size: 0.75rem; color: #ccc; margin-bottom: 6px; font-weight: 500; }
+  .profile-form input, .profile-form select { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 12px; color: #fff; font-size: 0.9rem; font-family: 'Poppins', sans-serif; outline: none; appearance: none; }
+  .profile-form input:focus, .profile-form select:focus { border-color: #FFD700; box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.08); }
+  .profile-form input::placeholder { color: #555; }
+  .profile-form select option { background: #151515; }
+  .profile-form input:disabled { opacity: 0.6; cursor: not-allowed; }
+  .save-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; font-family: 'Poppins', sans-serif; cursor: pointer; box-shadow: 0 0 25px rgba(255, 215, 0, 0.3); }
+  .save-btn:disabled { opacity: 0.5; }
+
+  .status-msg { margin: 16px 20px; padding: 12px; border-radius: 10px; font-size: 0.85rem; text-align: center; display: none; }
+  .status-msg.show { display: block; }
+  .status-msg.success { background: rgba(80, 220, 120, 0.15); color: #4ade80; border: 1px solid rgba(80, 220, 120, 0.3); }
+  .status-msg.error { background: rgba(255, 60, 60, 0.15); color: #ff6b6b; border: 1px solid rgba(255, 60, 60, 0.3); }
+
+  /* MODALS */
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: #151515; border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; padding: 24px; width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto; }
+  .modal h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; color: #A855F7; }
+  .modal label { display: block; font-size: 0.8rem; color: #A855F7; margin-bottom: 6px; font-weight: 600; }
+  .modal input, .modal select, .modal textarea { width: 100%; padding: 12px 14px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 0.95rem; font-family: 'Poppins', sans-serif; outline: none; margin-bottom: 14px; }
+  .modal input:focus, .modal select:focus, .modal textarea:focus { border-color: #A855F7; }
+  .modal textarea { resize: vertical; min-height: 100px; }
+  .modal select option { background: #151515; }
+  .modal-btns { display: flex; gap: 10px; }
+  .modal-btn { flex: 1; padding: 14px; border-radius: 12px; font-weight: 700; font-family: 'Poppins', sans-serif; cursor: pointer; border: none; font-size: 0.9rem; }
+  .modal-btn.cancel { background: #262626; color: #fff; }
+  .modal-btn.submit { background: #A855F7; color: #fff; }
+
+  .pin-toggle { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding: 12px; background: rgba(255, 215, 0, 0.05); border: 1px solid rgba(255, 215, 0, 0.2); border-radius: 12px; cursor: pointer; }
+  .pin-toggle input { width: auto; margin: 0; }
+  .pin-toggle label { margin: 0; color: #FFD700; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+
+  .loading-screen { position: fixed; inset: 0; background: #0a0a0a; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; z-index: 9999; }
+  .loading-screen .spinner { width: 40px; height: 40px; border: 3px solid rgba(255, 215, 0, 0.2); border-top-color: #FFD700; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-screen p { color: #888; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loadingScreen">
+  <div class="spinner"></div>
+  <p>Loading UniBuzz...</p>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboardView" class="view">
+  <div class="header">
+    <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+  <div class="welcome">
+    <div class="welcome-text">
+      <h1>Welcome back, <span id="userName">Student</span> 👋</h1>
+      <p id="userMatric">Matric: --</p>
+    </div>
+    <div class="avatar-btn" id="avatarBtn" onclick="showProfile()">S</div>
+  </div>
+
+  <!-- ANNOUNCEMENTS STRIP -->
+  <div class="ann-strip" id="annStrip" style="display:none;"></div>
+
+  <div class="section-title">📌 Explore UniBuzz</div>
+  <div class="grid">
+    <div class="card" onclick="showAcademics()">
+      <span class="icon">📚</span>
+      <div class="title">Academics</div>
+      <div class="desc">Materials, past questions & timetable</div>
+    </div>
+    <div class="card announc-card" onclick="showAnnouncements()">
+      <span class="icon">📢</span>
+      <div class="title">Announcements</div>
+      <div class="desc">Campus news & updates</div>
+    </div>
+    <div class="card fresher-card-main" onclick="showFresherGuide()">
+      <span class="icon">🎓</span>
+      <div class="title">Fresher's Guide</div>
+      <div class="desc">Start your campus journey right</div>
+    </div>
+    <div class="card community-card" onclick="showCommunity()">
+      <span class="icon">👥</span>
+      <div class="title">Community</div>
+      <div class="desc">Posts, questions & study groups</div>
+    </div>
+    <div class="card" onclick="showSpots()">
+      <span class="icon">🍴</span>
+      <div class="title">Campus Spots</div>
+      <div class="desc">Food, laundry, printing & essentials</div>
+    </div>
+    <div class="card profile-card" onclick="showProfile()">
+      <span class="icon">👤</span>
+      <div class="title">My Profile</div>
+      <div class="desc">Update your info & settings</div>
+    </div>
+    <div class="card vendor-card" id="vendorCard" onclick="window.location.href='vendor-register.html'" style="display:none;">
+      <span class="icon">🏪</span>
+      <div class="title">My Business</div>
+      <div class="desc">Manage your listing</div>
+    </div>
+    <div class="card admin-card" id="adminCard" onclick="showAdmin()" style="display:none;">
+      <span class="icon">👑</span>
+      <div class="title">Admin Panel</div>
+      <div class="desc">Approve uploads & manage content</div>
+    </div>
+  </div>
+  <div class="section-title" style="margin-top: 20px;">⚡ 100L Engineering — Quick Access</div>
+  <div class="course-list">
+    <div class="course-item"><div class="info"><h3>MTS 101</h3><p>Elementary Mathematics I</p></div><div class="units">2 Units</div></div>
+    <div class="course-item"><div class="info"><h3>PHY 101</h3><p>General Physics I</p></div><div class="units">2 Units</div></div>
+    <div class="course-item"><div class="info"><h3>GNS 101</h3><p>Use of English I</p></div><div class="units">2 Units</div></div>
+    <div class="course-item"><div class="info"><h3>MEE 101</h3><p>Engineering Drawing I</p></div><div class="units">1 Unit</div></div>
+  </div>
+  <div class="message">🚧 UniBuzz is under construction. Features are dropping soon!</div>
+</div>
+
+<!-- ANNOUNCEMENTS VIEW -->
+<div id="announcementsView" class="view">
+  <div class="header">
+    <button class="back-btn" onclick="showDashboard()">←</button>
+    <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+    <div style="width: 30px;"></div>
+  </div>
+  <div class="ann-hero">
+    <div class="script">Stay Informed</div>
+    <h1>Campus <span class="red">Announcements</span></h1>
+    <p>News, updates, events, and important notices from UniBuzz.</p>
+  </div>
+  <div class="filter-wrap" id="annFilters">
+    <button class="filter-btn active" onclick="filterAnn('all')">All</button>
+    <button class="filter-btn" onclick="filterAnn('General')">📢 General</button>
+    <button class="filter-btn" onclick="filterAnn('Academic')">📚 Academic</button>
+    <button class="filter-btn" onclick="filterAnn('Events')">🎉 Events</button>
+    <button class="filter-btn" onclick="filterAnn('Urgent')">🚨 Urgent</button>
+    <button class="filter-btn" onclick="filterAnn('Sports')">🏆 Sports</button>
+  </div>
+  <div class="ann-list" id="annList"><div class="empty">Loading...</div></div>
+</div>
+
+<!-- FRESHER GUIDE -->
+<div id="fresherView" class="view">
+  <div class="header">
+    <button class="back-btn" onclick="showDashboard()">←</button>
+    <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+    <div style="width: 30px;"></div>
+  </div>
+  <div class="fresher-hero">
+    <div class="script">New Here? Start Your Journey</div>
+    <h1>Fresher's <span class="gold">Guide</span></h1>
+    <p>Everything you need to know to survive and thrive in your first year on campus.</p>
+  </div>
+  <div class="fresher-cards" id="fresherCards"></div>
+</div>
+
+<div id="fresherDetailView" class="view">
+  <div class="header">
+    <button class="back-btn" onclick="showFresherGuide()">←</button>
+    <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+    <div style="width: 30px;"></div>
+  </div>
+  <div id="fresherDetailContent"></div>
+</div>
+
+<!-- ACADEMICS -->
+<div id="academicsView" class="view">
+  <div class="header">
+    <button class="back-btn" onclick="showDashboard()">←</button>
+    <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+    <div style="width: 30px;"></div>
+  </div>
+  <div class="inner-toggle">
+    <button class="toggle-btn active" id="toggleMaterials" onclick="switchAcademics('materials')">📚 Materials</button>
+    <button class="toggle-btn" id="toggleTimetable" onclick="switchAcademics('timetable')">📅 Timetable</button>
+  </div>
+  <div id="materialsSubView">
+    <div class="hero"><h1>📚 <span>Materials</span></h1><p>Past questions, notes & lecture materials</p></div>
+    <button class="upload-btn" onclick="openUploadModal()">+ Upload a Material</button>
+    <div class="search-wrap"><input type="text" id="searchInput" placeholder="🔍 Search by course code or title..." oninput="filterMaterials()"></div>
+    <div class="materials-list" id="materialsList"><div class="empty">Loading...</div></div>
+  </div>
+  <div id="timetableSubView" style="display:none;">
+    <div class="hero"><h1>📅 <span>Timetable</span></h1><p>100L Engineering — 1st Semester</p></div>
+    <div class="filter-wrap" id="dayFilters">
+      <button class="filter-btn active" onclick="filterTimetable('all')">All</button>
+      <button class="filter-btn" onclick="filterTimetable('Monday')">Monday</button>
+      <button class="filter-btn" onclick="filterTimetable('Tuesday')">Tuesday</button>
+      <button class="filter-btn" onclick="filterTimetable('Wednesday')">Wednesday</button>
+      <button class="filter-btn" onclick="filterTimetable('Thursday')">Thursday</button>
+      <button class="filter-btn" onclick="filterTimetable('Friday')">Friday</button>
+    </div>
+    <div class="timetable-list" id="timetableList"></div>
+  </div>
+</div>
+
+<!-- COMMUNITY -->
+<div id="communityView" class="view">
+  <div class="header">
+    <button class="back-btn" onclick="showDashboard()">←</button>
+    <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+    <div style="width: 30px;"></div>
+  </div>
+  <div class="community-hero">
+    <div class="script">Talk. Ask. Connect.</div>
+    <h1>Campus <span class="purple">Community</span></h1>
+    <p>Ask questions, form study groups, find lost items, and connect with fellow students.</p>
+  </div>
+  <button class="upload-btn" style="background: linear-gradient(135deg, #A855F7, #7C3AED); color: #fff;" onclick="openNewPostModal()">+ New Post</button>
+  <div class="community-tabs" id="commFilters">
+    <button class="comm-tab active" onclick="filterPosts('all')">All</button>
+    <button class="comm-tab" onclick="filterPosts('Study Group')">📚 Study Group</button>
+    <button class="comm-tab" onclick="filterPosts('Lost & Found')">🆘 Lost & Found</button>
+    <button class="comm-tab" onclick="filterPosts('Question')">❓ Question</button>
+    <button class="comm-tab" onclick="filterPosts('General')">💬 General</button>
+  </div>
+  <div class="posts-list" id="postsList"><div class="empty">Loading...</div></div>
+</div>
+
+<div id="postDetailView" class="view">
+  <div class="header">
+    <button class="back-btn" onclick="showCommunity()">←</button>
+    <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+    <div style="width: 30px;"></div>
+  </div>
+  <div class="post-detail-header" id="postDetailHeader"></div>
+  <div class="replies-list" id="repliesList"></div>
+  <div class="reply-box">
+    <textarea id="replyInput" placeholder="Write a reply..."></textarea>
+    <button onclick="submitReply()">Post Reply</button>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="profileView" class="view">
+  <div class="header">
+    <button class="back-btn" onclick="showDashboard()">←</button>
+    <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+    <div style="width: 30px;"></div>
+  </div>
+  <div class="profile-header-card">
+    <div class="profile-avatar-lg" id="profileAvatar">S</div>
+    <h2 id="profileName">Student</h2>
+    <div class="p-email" id="profileEmail">--</div>
+    <div class="p-badges" id="profileBadges"></div>
+  </div>
+  <div class="profile-form">
+    <div class="pf-section">
+      <h3>👤 Personal Info</h3>
+      <div class="pf-group"><label>Full Name</label><input type="text" id="pfFullName" placeholder="e.g. Seun Dabó"></div>
+      <div class="pf-group"><label>Email (cannot be changed)</label><input type="email" id="pfEmail" disabled></div>
+    </div>
+    <div class="pf-section">
+      <h3>🎓 Academic Info</h3>
+      <div class="pf-group">
+        <label>School / Faculty</label>
+        <select id="pfSchool" onchange="updateProfileDepartments()">
+          <option value="">Select school</option>
+          <option value="SAAT">🌾 SAAT</option>
+          <option value="SEET">⚙️ SEET</option>
+          <option value="SEMS">🌍 SEMS</option>
+          <option value="SET">🏛️ SET</option>
+          <option value="SOS">🔬 SOS</option>
+          <option value="SOC">💻 SOC</option>
+          <option value="SMAT">📊 SMAT</option>
+          <option value="SHHT">🏥 SHHT</option>
+          <option value="Other">📚 Other</option>
+        </select>
+      </div>
+      <div class="pf-group"><label>Department</label><select id="pfDepartment"><option value="">Select school first</option></select></div>
+      <div class="pf-group"><label>Matric Number</label><input type="text" id="pfMatric" placeholder="e.g. IPE/22/1234"></div>
+    </div>
+    <button class="save-btn" id="saveProfileBtn" onclick="saveProfile()">💾 Save Changes</button>
+  </div>
+  <div class="status-msg" id="profileStatus"></div>
+  <div style="padding: 0 20px 30px;">
+    <button onclick="logout()" style="width: 100%; padding: 14px; background: rgba(255, 60, 60, 0.1); color: #ff6b6b; border: 1px solid rgba(255, 60, 60, 0.3); border-radius: 12px; font-weight: 700; font-size: 0.9rem; font-family: 'Poppins', sans-serif; cursor: pointer;">Logout</button>
+  </div>
+</div>
+
+<!-- SPOTS -->
+<div id="spotsView" class="view">
+  <div class="header">
+    <button class="back-btn" onclick="showDashboard()">←</button>
+    <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+    <div style="width: 30px;"></div>
+  </div>
+  <div class="spots-hero">
+    <div class="script">Your Campus, One Hub</div>
+    <h1><span class="uni">Uni</span><span class="buzz">Buzz</span></h1>
+    <div class="subtitle">Food, laundry, printing & essentials — all in one place.</div>
+    <div class="features-row">
+      <div class="feature-badge"><div class="fb-icon">⚡</div><div class="fb-label">Quick Service</div></div>
+      <div class="feature-badge"><div class="fb-icon">✅</div><div class="fb-label">Reliable Vendors</div></div>
+      <div class="feature-badge"><div class="fb-icon">📍</div><div class="fb-label">Campus Convenient</div></div>
+      <div class="feature-badge"><div class="fb-icon">😊</div><div class="fb-label">Student Friendly</div></div>
+    </div>
+  </div>
+  <div class="cat-cards-row" id="catCardsRow">
+    <div class="cat-card" data-cat="Food" onclick="filterSpots('Food')"><div class="cat-icon-box">🍲</div><div class="cat-label">Food <span class="arrow">→</span></div></div>
+    <div class="cat-card" data-cat="Laundry" onclick="filterSpots('Laundry')"><div class="cat-icon-box">🧺</div><div class="cat-label">Laundry <span class="arrow">→</span></div></div>
+    <div class="cat-card" data-cat="Printing" onclick="filterSpots('Printing')"><div class="cat-icon-box">🖨️</div><div class="cat-label">Printing <span class="arrow">→</span></div></div>
+    <div class="cat-card" data-cat="Accommodation" onclick="filterSpots('Accommodation')"><div class="cat-icon-box">🏠</div><div class="cat-label">Accom <span class="arrow">→</span></div></div>
+    <div class="cat-card" data-cat="Transport" onclick="filterSpots('Transport')"><div class="cat-icon-box">🚌</div><div class="cat-label">Transit <span class="arrow">→</span></div></div>
+  </div>
+  <div class="spots-section-title"><span class="pin-icon">📍</span><h2>Our Campus Spots</h2></div>
+  <div class="spots-subtitle">Reliable spots. Student friendly prices.</div>
+  <div class="spots-container" id="spotsList"></div>
+  <div class="cta-banner">
+    <div class="cta-icon">🎓</div>
+    <div class="cta-text"><h4>Need something else?</h4><p>UniBuzz got you!</p></div>
+    <button onclick="window.open('https://wa.me/2349152029179', '_blank')">Contact Us</button>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="adminView" class="view">
+  <div class="header">
+    <button class="back-btn" onclick="showDashboard()">←</button>
+    <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+    <div style="width: 30px;"></div>
+  </div>
+  <div class="hero"><h1>👑 <span>Admin Panel</span></h1><p>Manage everything</p></div>
+  <div class="inner-toggle">
+    <button class="toggle-btn active" id="toggleAdminMaterials" onclick="switchAdminSection('materials')">📚 Materials</button>
+    <button class="toggle-btn" id="toggleAdminVendors" onclick="switchAdminSection('vendors')">🏪 Vendors</button>
+    <button class="toggle-btn" id="toggleAdminAnn" onclick="switchAdminSection('announcements')">📢 Announce</button>
+  </div>
+  <div id="adminMaterialsSection">
+    <div class="inner-toggle">
+      <button class="toggle-btn active" id="togglePending" onclick="switchAdmin('pending')">⏳ Pending</button>
+      <button class="toggle-btn" id="toggleAll" onclick="switchAdmin('all')">📋 All</button>
+    </div>
+    <div class="materials-list" id="adminList"></div>
+  </div>
+  <div id="adminVendorsSection" style="display:none;">
+    <div class="inner-toggle">
+      <button class="toggle-btn active" id="toggleVendorPending" onclick="switchAdminVendors('pending')">⏳ Pending</button>
+      <button class="toggle-btn" id="toggleVendorAll" onclick="switchAdminVendors('all')">📋 All</button>
+    </div>
+    <div class="materials-list" id="adminVendorsList"></div>
+  </div>
+  <div id="adminAnnSection" style="display:none;">
+    <button class="upload-btn" onclick="openNewAnnModal()">+ Post Announcement</button>
+    <div class="ann-list" id="adminAnnList"></div>
+  </div>
+</div>
+
+<!-- UPLOAD MATERIAL MODAL -->
+<div class="modal-overlay" id="uploadModal">
+  <div class="modal" style="border-color: rgba(255, 215, 0, 0.3);">
+    <h2 style="color: #FFD700;">📤 Upload Material</h2>
+    <label style="color: #FFD700;">Title</label>
+    <input type="text" id="uploadTitle" placeholder="e.g. MTS 101 Past Questions 2023">
+    <label style="color: #FFD700;">Course Code</label>
+    <input type="text" id="uploadCourse" placeholder="e.g. MTS 101">
+    <label style="color: #FFD700;">PDF File</label>
+    <input type="file" id="uploadFile" accept="application/pdf">
+    <div id="uploadStatus" style="text-align:center;padding:10px;font-size:0.85rem;margin-top:10px;border-radius:10px;display:none;"></div>
+    <div class="modal-btns" style="margin-top:10px;">
+      <button class="modal-btn cancel" onclick="closeUploadModal()">Cancel</button>
+      <button class="modal-btn submit" id="uploadSubmitBtn" style="background: linear-gradient(135deg, #FFD700, #FFA500); color: #000;" onclick="handleUpload()">Upload</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW POST MODAL -->
+<div class="modal-overlay" id="newPostModal">
+  <div class="modal">
+    <h2>📝 New Post</h2>
+    <label>Category</label>
+    <select id="postCategory">
+      <option value="">Select category</option>
+      <option value="Study Group">📚 Study Group</option>
+      <option value="Lost & Found">🆘 Lost & Found</option>
+      <option value="Question">❓ Question</option>
+      <option value="General">💬 General</option>
+    </select>
+    <label>Title</label>
+    <input type="text" id="postTitle" placeholder="e.g. Looking for MTS 101 study partners">
+    <label>Message (optional)</label>
+    <textarea id="postBody" placeholder="Add more details..."></textarea>
+    <div id="postStatus" style="text-align:center;padding:10px;font-size:0.85rem;margin-bottom:10px;border-radius:10px;display:none;"></div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="closeNewPostModal()">Cancel</button>
+      <button class="modal-btn submit" id="postSubmitBtn" onclick="submitPost()">Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW ANNOUNCEMENT MODAL -->
+<div class="modal-overlay" id="newAnnModal">
+  <div class="modal" style="border-color: rgba(244, 63, 94, 0.3);">
+    <h2 style="color: #F43F5E;">📢 New Announcement</h2>
+    <label style="color: #F43F5E;">Category</label>
+    <select id="annCategory" style="border-color: #333;">
+      <option value="General">📢 General</option>
+      <option value="Academic">📚 Academic</option>
+      <option value="Events">🎉 Events</option>
+      <option value="Urgent">🚨 Urgent</option>
+      <option value="Sports">🏆 Sports</option>
+    </select>
+    <label style="color: #F43F5E;">Title</label>
+    <input type="text" id="annTitle" placeholder="e.g. MTS 101 test shifted to Friday">
+    <label style="color: #F43F5E;">Message</label>
+    <textarea id="annBody" placeholder="Full details here..."></textarea>
+    <div class="pin-toggle" onclick="document.getElementById('annPin').click()">
+      <input type="checkbox" id="annPin">
+      <label for="annPin">📌 Pin this announcement (shows at top)</label>
+    </div>
+    <div id="annStatus" style="text-align:center;padding:10px;font-size:0.85rem;margin-bottom:10px;border-radius:10px;display:none;"></div>
+    <div class="modal-btns">
+      <button class="modal-btn cancel" onclick="closeNewAnnModal()">Cancel</button>
+      <button class="modal-btn submit" id="annSubmitBtn" style="background: #F43F5E;" onclick="submitAnnouncement()">Post</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://wrjdtcmzccgrmufinxbo.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_vNJRQlZeNWcMl6crV8tOYQ_d_x-13pC';
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const SCHOOL_DATA = {
+    'SAAT': ['Agricultural Economics & Extension', 'Animal Production & Health', 'Crop, Soil & Pest Management', 'Fisheries & Aquaculture Technology', 'Food Science & Technology', 'Forestry & Wood Technology', 'Ecotourism & Wildlife Management'],
+    'SEET': ['Agricultural Engineering', 'Chemical Engineering', 'Civil Engineering', 'Computer Engineering', 'Electrical & Electronics Engineering', 'Industrial & Production Engineering', 'Mechanical Engineering', 'Metallurgical & Materials Engineering', 'Mining Engineering', 'Petroleum Engineering'],
+    'SEMS': ['Applied Geology', 'Applied Geophysics', 'Applied Mineral & Petrology', 'Meteorology & Climate Science', 'Marine Science & Technology', 'Remote Sensing & GIS'],
+    'SET': ['Architecture', 'Building', 'Estate Management', 'Industrial Design', 'Quantity Surveying', 'Surveying & Geoinformatics', 'Urban & Regional Planning'],
+    'SOS': ['Biochemistry', 'Biology', 'Chemistry', 'Mathematical Sciences', 'Microbiology', 'Physics', 'Statistics'],
+    'SOC': ['Computer Science', 'Cyber Security', 'Information Technology', 'Software Engineering'],
+    'SMAT': ['Business Administration', 'Entrepreneurship', 'Project Management Technology', 'Transport Management Technology'],
+    'SHHT': ['Biomedical Technology', 'Environmental Health Science', 'Human Anatomy', 'Human Physiology', 'Nursing Science', 'Public Health'],
+    'Other': ['Other Department']
+  };
+
+  const FRESHER_GUIDE = [
+    { id: 'registration', icon: '📋', title: 'Registration & Documents', subtitle: 'Everything you need to register', tips: [
+      { title: 'Wetin to bring', body: 'JAMB result slip, O\'level result, birth certificate, passport photos (about 8 copies), and your admission letter.' },
+      { title: 'Pay school fees', body: 'Fees are paid via the school portal. Follow the instructions on the FUTA website. Keep your payment receipt safe.' },
+      { title: 'Course registration', body: 'Log in to the student portal. Register your courses carefully. Meet your Course Adviser if you have questions.' },
+      { title: 'Matric number & ID', body: 'You will receive your matric number after registration is complete. Update it in your UniBuzz profile.' }
+    ]},
+    { id: 'campus', icon: '🏫', title: 'Campus Navigation', subtitle: 'Know your way around', tips: [
+      { title: 'Lecture halls', body: 'LT 1, Hill Top, ETF, Old 1k Cap — learn these early. Ask seniors to show you around in your first week.' },
+      { title: 'SUB & Library', body: 'SUB is the student union building — food, events, hangout spot. The library is where you read + borrow books.' },
+      { title: 'Health centre', body: 'The campus health centre handles basic medical care. Know where e dey.' },
+      { title: 'Banks & ATMs', body: 'There are ATMs around campus. Know the ones wey dey less crowded.' }
+    ]},
+    { id: 'academic', icon: '📚', title: 'Academic Survival', subtitle: 'How to pass your courses', tips: [
+      { title: 'How lectures work', body: 'Lecturers give handouts, notes, and assignments. Attend every lecture — some carry marks.' },
+      { title: 'GPA system', body: 'Your GPA depends on your course grades. A = 5 points, B = 4, C = 3. Study hard from day one.' },
+      { title: 'Avoid carryover', body: 'Carryover means you failed a course and must retake it. E dey delay graduation. Avoid am.' },
+      { title: 'Exam rules', body: 'No phones for exam hall. Dress properly. Arrive early. Bring your ID card.' }
+    ]},
+    { id: 'hostel', icon: '🏠', title: 'Hostel Life', subtitle: 'Living on campus', tips: [
+      { title: 'Hostel application', body: 'Apply on the portal when e open. Space dey limited — apply early.' },
+      { title: 'Wetin to bring', body: 'Bucket, mattress, bedsheets, provisions, padlock, torchlight, small kettle.' },
+      { title: 'Roommate tips', body: 'Respect each other. Set rules early. Keep your space clean.' },
+      { title: 'Off-campus lodges', body: 'If hostel no work, plenty lodges dey around campus. Check Campus Spots for options.' }
+    ]},
+    { id: 'money', icon: '💰', title: 'Money Matters', subtitle: 'Budget & save on campus', tips: [
+      { title: 'Weekly budget', body: 'Feeding, transport, data, books, emergencies. Plan am out so you no go run out mid-week.' },
+      { title: 'Cheap food spots', body: 'Check Campus Spots for affordable food vendors around FUTA.' },
+      { title: 'Avoid scams', body: 'Never send money to strangers. Verify first.' }
+    ]},
+    { id: 'social', icon: '🎉', title: 'Social & Campus Life', subtitle: 'Make friends, have fun', tips: [
+      { title: 'Join clubs', body: 'Sports, drama, debate, religious groups, department associations. Pick 1-2 wey you sabi.' },
+      { title: 'Freshers events', body: 'Orientation, freshers\' night, department welcome parties. Attend dem.' },
+      { title: 'Make friends', body: 'Be open, be respectful, be yourself.' }
+    ]},
+    { id: 'safety', icon: '🚨', title: 'Safety & Scams', subtitle: 'Stay safe on campus', tips: [
+      { title: 'Cultism warning', body: 'Never join any secret group. Report pressure to school authorities.' },
+      { title: 'Watch out for scams', body: 'Fake agents, fake scholarship, fake job offers — if e too good to be true, e be scam.' },
+      { title: 'Emergency contacts', body: 'Save campus security, health centre, and department contact on your phone.' }
+    ]},
+    { id: 'faqs', icon: '💬', title: 'FAQs', subtitle: 'Common questions answered', tips: [
+      { title: 'How do I know my lecture hall?', body: 'Check your timetable on UniBuzz. The venue dey written for each course.' },
+      { title: 'What if I miss registration?', body: 'Contact your department office immediately. Late registration may attract extra fees.' },
+      { title: 'Can I change department?', body: 'Yes, but e get process. Talk to your HOD and follow the official procedure.' },
+      { title: 'How do I get my exam timetable?', body: 'E go dey published on the school portal. Also check notice boards.' }
+    ]}
+  ];
+
+  let currentUser = null;
+  let currentProfile = null;
+  let isAdmin = false;
+  let allMaterials = [];
+  let allSpots = [];
+  let allPosts = [];
+  let allAnnouncements = [];
+  let currentPostId = null;
+  let currentAdminTab = 'pending';
+  let currentAdminVendorTab = 'pending';
+
+  const catEmoji = { 'Food': '🍲', 'Laundry': '🧺', 'Printing': '🖨️', 'Accommodation': '🏠', 'Transport': '🚌' };
+
+  const timetableData = [
+    { day: 'Monday', time: '8:00 - 10:00', course: 'GNS 103', venue: 'Old 1k Cap (SEET A)' },
+    { day: 'Monday', time: '10:00 - 12:00', course: 'MTS 101', venue: 'LT 1' },
+    { day: 'Monday', time: '12:00 - 2:00', course: 'GNS 103', venue: 'Old 1k Cap (SEET B)' },
+    { day: 'Tuesday', time: '8:00 - 10:00', course: 'GNS 101', venue: 'LT 1 (SEET A)' },
+    { day: 'Tuesday', time: '10:00 - 12:00', course: 'GNS 101', venue: 'LT 1 (SEET B)' },
+    { day: 'Tuesday', time: '12:00 - 2:00', course: 'MEE 101', venue: 'Old 1k Cap' },
+    { day: 'Wednesday', time: '8:00 - 10:00', course: 'CHE 101', venue: 'Hill Top' },
+    { day: 'Wednesday', time: '10:00 - 12:00', course: 'PHY 101', venue: 'Hill Top' },
+    { day: 'Wednesday', time: '12:00 - 2:00', course: 'PHY 103', venue: 'LT 1' },
+    { day: 'Wednesday', time: '4:00 - 6:00', course: 'MTH 101', venue: 'Tutorial' },
+    { day: 'Thursday', time: '10:00 - 12:00', course: 'GET 107', venue: 'ETF' },
+    { day: 'Thursday', time: '2:00 - 4:00', course: 'PHY 107', venue: 'LAB I, II, III' }
+  ];
+
+  async function init() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) { window.location.href = 'index.html'; return; }
+    currentUser = session.user;
+
+    const { data: profile, error } = await supabaseClient.from('profiles').select('*').eq('id', currentUser.id).maybeSingle();
+    if (error || !profile) {
+      currentProfile = { full_name: currentUser.email.split('@')[0], matric_no: '--', role: 'student', is_admin: false };
+    } else {
+      currentProfile = profile;
+    }
+
+    refreshDashboardUI();
+    loadAnnouncementStrip();
+    document.getElementById('loadingScreen').style.display = 'none';
+    showView('dashboardView');
+  }
+
+  function refreshDashboardUI() {
+    const name = currentProfile.full_name || 'Student';
+    document.getElementById('userName').textContent = name;
+    document.getElementById('avatarBtn').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('profileAvatar').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('profileName').textContent = name;
+    document.getElementById('profileEmail').textContent = currentProfile.email || currentUser.email;
+    document.getElementById('userMatric').textContent = 'Matric: ' + (currentProfile.matric_no || '--');
+
+    if (currentProfile.is_admin) {
+      isAdmin = true;
+      document.getElementById('adminCard').style.display = 'block';
+    }
+    if (currentProfile.role === 'vendor' || currentProfile.role === 'both') {
+      document.getElementById('vendorCard').style.display = 'block';
+    }
+
+    const badges = [];
+    if (currentProfile.is_admin) badges.push('<span class="badge admin">👑 Admin</span>');
+    if (currentProfile.role === 'vendor' || currentProfile.role === 'both') badges.push('<span class="badge vendor">🏪 Vendor</span>');
+    document.getElementById('profileBadges').innerHTML = badges.join('');
+  }
+
+  async function logout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = 'index.html';
+  }
+
+  function hideAllViews() {
+    document.querySelectorAll('.view').forEach(v => { v.classList.remove('active'); v.style.display = 'none'; });
+  }
+  function showView(id) {
+    hideAllViews();
+    const el = document.getElementById(id);
+    el.classList.add('active');
+    el.style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  function showDashboard() { showView('dashboardView'); loadAnnouncementStrip(); }
+  function showAcademics() { showView('academicsView'); loadMaterials(); }
+  function showSpots() { showView('spotsView'); loadSpots(); }
+  function showAdmin() { showView('adminView'); loadAdminMaterials(); }
+  function showCommunity() { showView('communityView'); loadPosts(); }
+  function showAnnouncements() { showView('announcementsView'); loadAnnouncements(); }
+
+  /* ===== ANNOUNCEMENTS ===== */
+  async function loadAnnouncementStrip() {
+    const strip = document.getElementById('annStrip');
+    const { data } = await supabaseClient.from('announcements')
+      .select('*')
+      .order('pinned', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(2);
+
+    if (!data || data.length === 0) {
+      strip.style.display = 'none';
+      return;
+    }
+
+    strip.style.display = 'block';
+    strip.innerHTML = data.map(a => {
+      const date = new Date(a.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+      return `<div class="ann-strip-item ${a.pinned ? 'pinned' : ''}" onclick="showAnnouncements()">
+        <div class="ast-top">
+          <span class="ast-cat">${a.pinned ? '📌 PINNED' : a.category}</span>
+          <span class="ast-date">${date}</span>
+        </div>
+        <h4>${a.title}</h4>
+      </div>`;
+    }).join('');
+  }
+
+  async function loadAnnouncements() {
+    const list = document.getElementById('annList');
+    list.innerHTML = `<div class="empty">Loading...</div>`;
+    const { data, error } = await supabaseClient.from('announcements')
+      .select('*')
+      .order('pinned', { ascending: false })
+      .order('created_at', { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="icon">📢</div><p>No announcements yet.<br>Check back soon!</p></div>`;
+      allAnnouncements = [];
+      return;
+    }
+    allAnnouncements = data;
+    renderAnnouncements(data);
+  }
+
+  function renderAnnouncements(items) {
+    const list = document.getElementById('annList');
+    if (items.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="icon">🔍</div><p>No announcements in this category</p></div>`;
+      return;
+    }
+    list.innerHTML = items.map(a => {
+      const date = new Date(a.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      return `<div class="ann-card ${a.pinned ? 'pinned' : ''}" data-cat="${a.category}">
+        <div class="ann-top">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <span class="ann-cat" data-cat="${a.category}">${a.category}</span>
+            ${a.pinned ? '<span class="ann-pin-badge">📌 Pinned</span>' : ''}
+          </div>
+          <span class="ann-date">${date}</span>
+        </div>
+        <h3>${a.title}</h3>
+        ${a.body ? `<div class="ann-body">${a.body}</div>` : ''}
+        <div class="ann-meta">
+          <span class="ann-author">👤 ${a.author_name || 'UniBuzz'}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function filterAnn(cat) {
+    if (cat === 'all') { renderAnnouncements(allAnnouncements); }
+    else { renderAnnouncements(allAnnouncements.filter(a => a.category === cat)); }
+    document.querySelectorAll('#annFilters .filter-btn').forEach(btn => {
+      btn.classList.remove('active');
+      const text = btn.textContent.trim().replace(/^[^\w]+/, '').trim();
+      if ((cat === 'all' && text === 'All') || text === cat) btn.classList.add('active');
+    });
+  }
+
+  function openNewAnnModal() { document.getElementById('newAnnModal').classList.add('show'); }
+  function closeNewAnnModal() {
+    document.getElementById('newAnnModal').classList.remove('show');
+    document.getElementById('annCategory').value = 'General';
+    document.getElementById('annTitle').value = '';
+    document.getElementById('annBody').value = '';
+    document.getElementById('annPin').checked = false;
+    document.getElementById('annStatus').style.display = 'none';
+  }
+
+  async function submitAnnouncement() {
+    const category = document.getElementById('annCategory').value;
+    const title = document.getElementById('annTitle').value.trim();
+    const body = document.getElementById('annBody').value.trim();
+    const pinned = document.getElementById('annPin').checked;
+    const status = document.getElementById('annStatus');
+    const btn = document.getElementById('annSubmitBtn');
+
+    if (!title) {
+      status.textContent = 'Please enter a title';
+      status.style.cssText = 'text-align:center;padding:10px;font-size:0.85rem;margin-bottom:10px;border-radius:10px;background:rgba(255,60,60,0.15);color:#ff6b6b;display:block;';
+      return;
+    }
+    btn.disabled = true; btn.textContent = 'Posting...';
+
+    try {
+      const { error } = await supabaseClient.from('announcements').insert({
+        title, body: body || null, category, pinned,
+        author_id: currentUser.id,
+        author_name: currentProfile.full_name || 'Admin'
+      });
+      if (error) throw error;
+      closeNewAnnModal();
+      loadAdminAnnouncements();
+      loadAnnouncementStrip();
+    } catch (err) {
+      status.textContent = 'Failed: ' + (err.message || 'Unknown');
+      status.style.cssText = 'text-align:center;padding:10px;font-size:0.85rem;margin-bottom:10px;border-radius:10px;background:rgba(255,60,60,0.15);color:#ff6b6b;display:block;';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Post';
+    }
+  }
+
+  async function loadAdminAnnouncements() {
+    const list = document.getElementById('adminAnnList');
+    list.innerHTML = `<div class="empty">Loading...</div>`;
+    const { data, error } = await supabaseClient.from('announcements')
+      .select('*')
+      .order('pinned', { ascending: false })
+      .order('created_at', { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="icon">📢</div><p>No announcements yet. Post one!</p></div>`;
+      return;
+    }
+    list.innerHTML = data.map(a => {
+      const date = new Date(a.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      return `<div class="ann-card ${a.pinned ? 'pinned' : ''}" data-cat="${a.category}">
+        <div class="ann-top">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <span class="ann-cat" data-cat="${a.category}">${a.category}</span>
+            ${a.pinned ? '<span class="ann-pin-badge">📌 Pinned</span>' : ''}
+          </div>
+          <span class="ann-date">${date}</span>
+        </div>
+        <h3>${a.title}</h3>
+        ${a.body ? `<div class="ann-body">${a.body}</div>` : ''}
+        <div class="ann-meta" style="margin-top:12px;">
+          <span class="ann-author">👤 ${a.author_name || 'Admin'}</span>
+          <button class="admin-btn reject" onclick="deleteAnnouncement(${a.id})">🗑 Delete</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  async function deleteAnnouncement(id) {
+    if (!confirm('Delete this announcement?')) return;
+    const { error } = await supabaseClient.from('announcements').delete().eq('id', id);
+    if (error) { alert('Error: ' + error.message); return; }
+    loadAdminAnnouncements();
+    loadAnnouncementStrip();
+  }
+
+  /* ===== FRESHER GUIDE ===== */
+  function showFresherGuide() { showView('fresherView'); renderFresherCards(); }
+  function renderFresherCards() {
+    document.getElementById('fresherCards').innerHTML = FRESHER_GUIDE.map(section => `
+      <div class="fresher-card" onclick="openFresherSection('${section.id}')">
+        <span class="fc-icon">${section.icon}</span>
+        <div class="fc-title">${section.title}</div>
+        <div class="fc-count">${section.tips.length} tips →</div>
+      </div>
+    `).join('');
+  }
+  function openFresherSection(id) {
+    const section = FRESHER_GUIDE.find(s => s.id === id);
+    if (!section) return;
+    showView('fresherDetailView');
+    document.getElementById('fresherDetailContent').innerHTML = `
+      <div class="fresher-section-title">
+        <span class="fs-icon">${section.icon}</span>
+        <h2>${section.title}</h2>
+        <p>${section.subtitle}</p>
+      </div>
+      <div class="fresher-detail-wrap">
+        ${section.tips.map(tip => `<div class="fresher-tip"><h3>${tip.title}</h3><p>${tip.body}</p></div>`).join('')}
+      </div>
+    `;
+  }
+
+  /* ===== PROFILE ===== */
+  function showProfile() {
+    showView('profileView');
+    document.getElementById('pfFullName').value = currentProfile.full_name || '';
+    document.getElementById('pfEmail').value = currentProfile.email || currentUser.email;
+    const school = currentProfile.school || '';
+    document.getElementById('pfSchool').value = school;
+    if (school) {
+      const deptSelect = document.getElementById('pfDepartment');
+      deptSelect.innerHTML = '<option value="">Select department</option>';
+      (SCHOOL_DATA[school] || []).forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = d;
+        if (d === currentProfile.department) opt.selected = true;
+        deptSelect.appendChild(opt);
+      });
+    }
+    document.getElementById('pfMatric').value = currentProfile.matric_no || '';
+  }
+
+  function updateProfileDepartments() {
+    const school = document.getElementById('pfSchool').value;
+    const deptSelect = document.getElementById('pfDepartment');
+    deptSelect.innerHTML = '';
+    if (!school) { deptSelect.innerHTML = '<option value="">Select school first</option>'; return; }
+    deptSelect.innerHTML = '<option value="">Select department</option>';
+    (SCHOOL_DATA[school] || []).forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = d;
+      deptSelect.appendChild(opt);
+    });
+  }
+
+  async function saveProfile() {
+    const btn = document.getElementById('saveProfileBtn');
+    const status = document.getElementById('profileStatus');
+    const fullName = document.getElementById('pfFullName').value.trim();
+    const school = document.getElementById('pfSchool').value;
+    const department = document.getElementById('pfDepartment').value;
+    const matricNo = document.getElementById('pfMatric').value.trim();
+    status.className = 'status-msg';
+    if (!fullName) {
+      status.textContent = 'Please enter your full name';
+      status.className = 'status-msg show error';
+      return;
+    }
+    btn.disabled = true; btn.textContent = 'Saving...';
+    try {
+      const updates = { full_name: fullName, school: school || null, department: department || null, matric_no: matricNo || null };
+      const { error } = await supabaseClient.from('profiles').update(updates).eq('id', currentUser.id);
+      if (error) throw error;
+      currentProfile = { ...currentProfile, ...updates };
+      refreshDashboardUI();
+      status.textContent = '✅ Profile updated successfully!';
+      status.className = 'status-msg show success';
+      setTimeout(() => { status.className = 'status-msg'; }, 3000);
+    } catch (err) {
+      status.textContent = 'Failed: ' + (err.message || 'Unknown error');
+      status.className = 'status-msg show error';
+    } finally {
+      btn.disabled = false; btn.textContent = '💾 Save Changes';
+    }
+  }
+
+  function switchAcademics(tab) {
+    const mSub = document.getElementById('materialsSubView');
+    const tSub = document.getElementById('timetableSubView');
+    if (tab === 'materials') {
+      mSub.style.display = 'block'; tSub.style.display = 'none';
+      document.getElementById('toggleMaterials').classList.add('active');
+      document.getElementById('toggleTimetable').classList.remove('active');
+      loadMaterials();
+    } else {
+      mSub.style.display = 'none'; tSub.style.display = 'block';
+      document.getElementById('toggleTimetable').classList.add('active');
+      document.getElementById('toggleMaterials').classList.remove('active');
+      renderTimetable('all');
+    }
+  }
+
+  function switchAdmin(tab) {
+    currentAdminTab = tab;
+    document.getElementById('togglePending').classList.toggle('active', tab === 'pending');
+    document.getElementById('toggleAll').classList.toggle('active', tab === 'all');
+    loadAdminMaterials();
+  }
+  function switchAdminSection(section) {
+    document.getElementById('adminMaterialsSection').style.display = section === 'materials' ? 'block' : 'none';
+    document.getElementById('adminVendorsSection').style.display = section === 'vendors' ? 'block' : 'none';
+    document.getElementById('adminAnnSection').style.display = section === 'announcements' ? 'block' : 'none';
+    document.getElementById('toggleAdminMaterials').classList.toggle('active', section === 'materials');
+    document.getElementById('toggleAdminVendors').classList.toggle('active', section === 'vendors');
+    document.getElementById('toggleAdminAnn').classList.toggle('active', section === 'announcements');
+    if (section === 'materials') loadAdminMaterials();
+    if (section === 'vendors') loadAdminVendors();
+    if (section === 'announcements') loadAdminAnnouncements();
+  }
+  function switchAdminVendors(tab) {
+    currentAdminVendorTab = tab;
+    document.getElementById('toggleVendorPending').classList.toggle('active', tab === 'pending');
+    document.getElementById('toggleVendorAll').classList.toggle('active', tab === 'all');
+    loadAdminVendors();
+  }
+
+  function renderTimetable(filter) {
+    const list = document.getElementById('timetableList');
+    const filtered = filter === 'all' ? timetableData : timetableData.filter(t => t.day === filter);
+    list.innerHTML = filtered.length === 0
+      ? `<div class="empty"><div class="icon">📅</div><p>No classes on ${filter}</p></div>`
+      : filtered.map(t => `<div class="timetable-item"><div class="day-badge">${t.day.substring(0, 3)}</div><div class="class-info"><h3>${t.course}</h3><div class="time">⏰ ${t.time}</div><div class="venue">📍 ${t.venue}</div></div></div>`).join('');
+    document.querySelectorAll('#dayFilters .filter-btn').forEach(btn => {
+      btn.classList.toggle('active', (filter === 'all' && btn.textContent.trim() === 'All') || btn.textContent.trim() === filter);
+    });
+  }
+  function filterTimetable(day) { renderTimetable(day); }
+
+  async function loadMaterials() {
+    const list = document.getElementById('materialsList');
+    list.innerHTML = `<div class="empty">Loading...</div>`;
+    const { data, error } = await supabaseClient.from('materials').select('*').eq('status', 'approved').order('created_at', { ascending: false });
+    if (error || !data || data.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="icon">📭</div><p>No materials yet.<br>Be the first to upload! 🚀</p></div>`;
+      allMaterials = []; return;
+    }
+    allMaterials = data;
+    renderMaterials(data);
+  }
+  function renderMaterials(materials) {
+    const list = document.getElementById('materialsList');
+    if (materials.length === 0) { list.innerHTML = `<div class="empty"><div class="icon">🔍</div><p>No matching materials found</p></div>`; return; }
+    list.innerHTML = materials.map(m => {
+      const date = new Date(m.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      return `<div class="material-item"><div class="material-info"><div class="course">${m.course_code || 'N/A'}</div><h3>${m.title}</h3><div class="meta">📅 ${date}</div></div><a class="download-btn" href="${m.file_url}" target="_blank" rel="noopener">⬇ PDF</a></div>`;
+    }).join('');
+  }
+  function filterMaterials() {
+    const q = document.getElementById('searchInput').value.toLowerCase().trim();
+    if (!q) { renderMaterials(allMaterials); return; }
+    renderMaterials(allMaterials.filter(m => (m.title || '').toLowerCase().includes(q) || (m.course_code || '').toLowerCase().includes(q)));
+  }
+
+  async function loadSpots() {
+    const list = document.getElementById('spotsList');
+    list.innerHTML = `<div class="empty">Loading spots...</div>`;
+    const [spotsRes, vendorsRes] = await Promise.all([
+      supabaseClient.from('spots').select('*').order('featured', { ascending: false }).order('created_at', { ascending: false }),
+      supabaseClient.from('vendors').select('*').eq('status', 'approved')
+    ]);
+    let combined = [];
+    if (spotsRes.data) combined = combined.concat(spotsRes.data.map(s => ({ ...s, source: 'base' })));
+    if (vendorsRes.data) combined = combined.concat(vendorsRes.data.map(v => ({ business_name: v.business_name, category: v.category, location: v.location, price: v.price, contact: v.contact, description: v.description, image_url: v.image_url, featured: v.featured, source: 'vendor' })));
+    allSpots = combined;
+    renderSpots('all');
+  }
+  function renderSpots(filter) {
+    const list = document.getElementById('spotsList');
+    const filtered = filter === 'all' ? allSpots : allSpots.filter(s => s.category === filter);
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="empty-spots"><div class="es-icon">🏪</div><h3>No vendors here yet</h3><p>We're just getting started! If you sell food, offer laundry, printing, or any service around campus — get listed on UniBuzz.</p><button class="es-btn" onclick="window.location.href='vendor-register.html'">🚀 Register as Vendor</button></div>`;
+    } else {
+      list.innerHTML = filtered.map(s => {
+        const emoji = catEmoji[s.category] || '📍';
+        const imgContent = s.image_url ? `<img src="${s.image_url}" alt="${s.business_name}">` : emoji;
+        return `<div class="spot-card" data-cat="${s.category}"><div class="spot-image" data-cat="${s.category}">${imgContent}</div><div class="spot-body"><div><div class="spot-header-line"><div class="spot-cat-icon">${emoji}</div><div class="spot-name-cat"><h3>${s.business_name}</h3><div class="cat-text">${s.category}${s.featured ? ' ⭐' : ''}</div></div></div>${s.description ? `<div class="spot-desc">${s.description}</div>` : ''}${s.location ? `<div class="spot-info-row"><span class="ic">📍</span> ${s.location}</div>` : ''}${s.contact ? `<div class="spot-info-row"><span class="ic">📞</span> ${s.contact}</div>` : ''}</div>${s.price ? `<div class="spot-price-pill">💰 ${s.price}</div>` : ''}</div></div>`;
+      }).join('');
+    }
+    document.querySelectorAll('#catCardsRow .cat-card').forEach(card => {
+      card.classList.toggle('selected', filter !== 'all' && card.dataset.cat === filter);
+    });
+  }
+  function filterSpots(cat) {
+    const card = document.querySelector(`#catCardsRow .cat-card[data-cat="${cat}"]`);
+    if (card && card.classList.contains('selected')) renderSpots('all');
+    else renderSpots(cat);
+  }
+
+  async function loadPosts() {
+    const list = document.getElementById('postsList');
+    list.innerHTML = `<div class="empty">Loading posts...</div>`;
+    const { data, error } = await supabaseClient.from('posts').select('*').order('created_at', { ascending: false });
+    if (error || !data || data.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="icon">👥</div><p>No posts yet.<br>Be the first to start a conversation!</p></div>`;
+      allPosts = []; return;
+    }
+    allPosts = data;
+    renderPosts('all');
+  }
+
+  async function renderPosts(filter) {
+    const list = document.getElementById('postsList');
+    const filtered = filter === 'all' ? allPosts : allPosts.filter(p => p.category === filter);
+    const replyCounts = {};
+    if (filtered.length > 0) {
+      const ids = filtered.map(p => p.id);
+      const { data: replies } = await supabaseClient.from('replies').select('post_id').in('post_id', ids);
+      if (replies) { replies.forEach(r => { replyCounts[r.post_id] = (replyCounts[r.post_id] || 0) + 1; }); }
+    }
+    if (filtered.length === 0) {
+      list.innerHTML = `<div class="empty"><div class="icon">📝</div><p>No posts in this category yet</p></div>`;
+    } else {
+      list.innerHTML = filtered.map(p => {
+        const date = new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        const replyCount = replyCounts[p.id] || 0;
+        return `<div class="post-card" data-cat="${p.category}" onclick="openPost(${p.id})"><div class="post-top"><span class="post-cat" data-cat="${p.category}">${p.category}</span><span style="font-size:0.68rem;color:#666;">${date}</span></div><h3>${p.title}</h3>${p.body ? `<div class="post-body-preview">${p.body}</div>` : ''}<div class="post-meta"><span class="author">👤 ${p.author_name || 'Student'}</span><span>💬 ${replyCount} ${replyCount === 1 ? 'reply' : 'replies'}</span></div></div>`;
+      }).join('');
+    }
+    document.querySelectorAll('#commFilters .comm-tab').forEach(tab => {
+      tab.classList.remove('active');
+      const text = tab.textContent.trim();
+      const match = (filter === 'all' && text === 'All') || text.includes(filter);
+      if (match) tab.classList.add('active');
+    });
+  }
+  function filterPosts(cat) { renderPosts(cat); }
+
+  function openNewPostModal() { document.getElementById('newPostModal').classList.add('show'); }
+  function closeNewPostModal() {
+    document.getElementById('newPostModal').classList.remove('show');
+    document.getElementById('postCategory').value = '';
+    document.getElementById('postTitle').value = '';
+    document.getElementById('postBody').value = '';
+    document.getElementById('postStatus').style.display = 'none';
+  }
+
+  async function submitPost() {
+    const category = document.getElementById('postCategory').value;
+    const title = document.getElementById('postTitle').value.trim();
+    const body = document.getElementById('postBody').value.trim();
+    const status = document.getElementById('postStatus');
+    const btn = document.getElementById('postSubmitBtn');
+    if (!category || !title) {
+      status.textContent = 'Please select a category and enter a title';
+      status.style.cssText = 'text-align:center;padding:10px;font-size:0.85rem;margin-bottom:10px;border-radius:10px;background:rgba(255,60,60,0.15);color:#ff6b6b;display:block;';
+      return;
+    }
+    btn.disabled = true; btn.textContent = 'Posting...';
+    try {
+      const { error } = await supabaseClient.from('posts').insert({ user_id: currentUser.id, author_name: currentProfile.full_name || 'Student', category, title, body: body || null });
+      if (error) throw error;
+      closeNewPostModal();
+      loadPosts();
+    } catch (err) {
+      status.textContent = 'Failed: ' + (err.message || 'Unknown error');
+      status.style.cssText = 'text-align:center;padding:10px;font-size:0.85rem;margin-bottom:10px;border-radius:10px;background:rgba(255,60,60,0.15);color:#ff6b6b;display:block;';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Post';
+    }
+  }
+
+  async function openPost(id) {
+    currentPostId = id;
+    showView('postDetailView');
+    const { data: post } = await supabaseClient.from('posts').select('*').eq('id', id).maybeSingle();
+    if (!post) return;
+    const date = new Date(post.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    document.getElementById('postDetailHeader').innerHTML = `<span class="post-cat" data-cat="${post.category}">${post.category}</span><h1>${post.title}</h1>${post.body ? `<div class="body">${post.body}</div>` : ''}<div class="info">👤 ${post.author_name} • 📅 ${date}</div>`;
+    loadReplies(id);
+  }
+
+  async function loadReplies(postId) {
+    const list = document.getElementById('repliesList');
+    list.innerHTML = `<h4>💬 Replies</h4><div class="empty" style="padding:20px;">Loading...</div>`;
+    const { data, error } = await supabaseClient.from('replies').select('*').eq('post_id', postId).order('created_at', { ascending: true });
+    if (error || !data || data.length === 0) {
+      list.innerHTML = `<h4>💬 Replies</h4><p style="color:#666;font-size:0.85rem;padding:10px 0;">No replies yet. Be the first!</p>`;
+      return;
+    }
+    list.innerHTML = `<h4>💬 Replies (${data.length})</h4>` + data.map(r => {
+      const time = new Date(r.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      return `<div class="reply-item"><div class="reply-author">👤 ${r.author_name || 'Student'}</div><div class="reply-body">${r.body}</div><div class="reply-time">${time}</div></div>`;
+    }).join('');
+  }
+
+  async function submitReply() {
+    const body = document.getElementById('replyInput').value.trim();
+    if (!body) { alert('Please write a reply'); return; }
+    try {
+      const { error } = await supabaseClient.from('replies').insert({ post_id: currentPostId, user_id: currentUser.id, author_name: currentProfile.full_name || 'Student', body });
+      if (error) throw error;
+      document.getElementById('replyInput').value = '';
+      loadReplies(currentPostId);
+    } catch (err) { alert('Failed: ' + err.message); }
+  }
+
+  async function loadAdminMaterials() {
+    const list = document.getElementById('adminList');
+    list.innerHTML = `<div class="empty">Loading...</div>`;
+    let query = supabaseClient.from('materials').select('*').order('created_at', { ascending: false });
+    if (currentAdminTab === 'pending') query = query.eq('status', 'pending');
+    const { data, error } = await query;
+    if (error || !data || data.length === 0) {
+      const msg = currentAdminTab === 'pending' ? 'No pending uploads. All clear! ✅' : 'No materials yet.';
+      list.innerHTML = `<div class="empty"><div class="icon">✨</div><p>${msg}</p></div>`;
+      return;
+    }
+    list.innerHTML = data.map(m => {
+      const date = new Date(m.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      const sc = m.status === 'approved' ? 'approved' : 'pending';
+      const st = m.status === 'approved' ? 'Approved' : 'Pending';
+      return `<div class="material-item ${sc}"><div class="material-info"><div class="course">${m.course_code || 'N/A'}</div><h3>${m.title}</h3><div class="meta">📅 ${date}</div><span class="status-badge ${sc}">${st}</span></div><div class="admin-actions">${m.status === 'pending' ? `<button class="admin-btn approve" onclick="approveMaterial(${m.id})">✓</button>` : ''}<button class="admin-btn reject" onclick="deleteMaterial(${m.id})">🗑</button></div></div>`;
+    }).join('');
+  }
+  async function approveMaterial(id) {
+    if (!confirm('Approve this material?')) return;
+    const { error } = await supabaseClient.from('materials').update({ status: 'approved' }).eq('id', id);
+    if (error) { alert('Error: ' + error.message); return; }
+    loadAdminMaterials();
+  }
+  async function deleteMaterial(id) {
+    if (!confirm('Delete permanently?')) return;
+    const { error } = await supabaseClient.from('materials').delete().eq('id', id);
+    if (error) { alert('Error: ' + error.message); return; }
+    loadAdminMaterials();
+  }
+  async function loadAdminVendors() {
+    const list = document.getElementById('adminVendorsList');
+    list.innerHTML = `<div class="empty">Loading...</div>`;
+    let query = supabaseClient.from('vendors').select('*').order('created_at', { ascending: false });
+    if (currentAdminVendorTab === 'pending') query = query.eq('status', 'pending');
+    const { data, error } = await query;
+    if (error || !data || data.length === 0) {
+      const msg = currentAdminVendorTab === 'pending' ? 'No pending vendors. All clear! ✅' : 'No vendors yet.';
+      list.innerHTML = `<div class="empty"><div class="icon">✨</div><p>${msg}</p></div>`;
+      return;
+    }
+    list.innerHTML = data.map(v => {
+      const date = new Date(v.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      const sc = v.status === 'approved' ? 'approved' : 'pending';
+      const st = v.status === 'approved' ? 'Approved' : 'Pending';
+      return `<div class="material-item ${sc}"><div class="material-info"><div class="course">${v.category || 'N/A'}</div><h3>${v.business_name}</h3><div class="meta">📍 ${v.location || 'No location'} • 📞 ${v.contact || 'No contact'}</div><div class="meta">📅 ${date}</div><span class="status-badge ${sc}">${st}</span></div><div class="admin-actions">${v.status === 'pending' ? `<button class="admin-btn approve" onclick="approveVendor(${v.id})">✓</button>` : ''}<button class="admin-btn reject" onclick="deleteVendor(${v.id})">🗑</button></div></div>`;
+    }).join('');
+  }
+  async function approveVendor(id) {
+    if (!confirm('Approve this vendor?')) return;
+    const { error } = await supabaseClient.from('vendors').update({ status: 'approved' }).eq('id', id);
+    if (error) { alert('Error: ' + error.message); return; }
+    loadAdminVendors();
+  }
+  async function deleteVendor(id) {
+    if (!confirm('Delete this vendor permanently?')) return;
+    const { error } = await supabaseClient.from('vendors').delete().eq('id', id);
+    if (error) { alert('Error: ' + error.message); return; }
+    loadAdminVendors();
+  }
+
+  function openUploadModal() { document.getElementById('uploadModal').classList.add('show'); }
+  function closeUploadModal() {
+    document.getElementById('uploadModal').classList.remove('show');
+    document.getElementById('uploadTitle').value = '';
+    document.getElementById('uploadCourse').value = '';
+    document.getElementById('uploadFile').value = '';
+    document.getElementById('uploadStatus').style.display = 'none';
+  }
+  async function handleUpload() {
+    const title = document.getElementById('uploadTitle').value.trim();
+    const course = document.getElementById('uploadCourse').value.trim();
+    const file = document.getElementById('uploadFile').files[0];
+    const status = document.getElementById('uploadStatus');
+    const btn = document.getElementById('uploadSubmitBtn');
+    if (!title || !course || !file) {
+      status.textContent = 'Please fill in all fields';
+      status.style.cssText = 'text-align:center;padding:10px;font-size:0.85rem;margin-top:10px;border-radius:10px;background:rgba(255,60,60,0.15);color:#ff6b6b;display:block;';
+      return;
+    }
+    btn.disabled = true; btn.textContent = 'Uploading...';
+    status.textContent = 'Uploading...';
+    status.style.cssText = 'text-align:center;padding:10px;font-size:0.85rem;margin-top:10px;border-radius:10px;background:rgba(80,220,120,0.15);color:#4ade80;display:block;';
+    try {
+      const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+      const { error: upErr } = await supabaseClient.storage.from('materials').upload(fileName, file);
+      if (upErr) throw upErr;
+      const { data: urlData } = supabaseClient.storage.from('materials').getPublicUrl(fileName);
+      const uploadStatus = isAdmin ? 'approved' : 'pending';
+      const { error: insErr } = await supabaseClient.from('materials').insert({ title, course_code: course, file_url: urlData.publicUrl, status: uploadStatus });
+      if (insErr) throw insErr;
+      status.textContent = isAdmin ? '✅ Uploaded & approved!' : '✅ Submitted! Pending approval.';
+      setTimeout(() => { closeUploadModal(); loadMaterials(); }, 1500);
+    } catch (err) {
+      status.textContent = 'Failed: ' + (err.message || 'Unknown');
+      status.style.cssText = 'text-align:center;padding:10px;font-size:0.85rem;margin-top:10px;border-radius:10px;background:rgba(255,60,60,0.15);color:#ff6b6b;display:block;';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Upload';
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>

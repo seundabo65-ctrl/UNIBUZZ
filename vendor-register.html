@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>UniBuzz — Vendor Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { background: #0a0a0a; color: #fff; font-family: 'Poppins', sans-serif; padding-bottom: 100px; }
+
+  .header { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; background: #0f0f0f; border-bottom: 1px solid rgba(255, 215, 0, 0.1); position: sticky; top: 0; z-index: 100; }
+  .logo-text { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.5px; }
+  .logo-text .uni { color: #fff; } .logo-text .buzz { color: #FFD700; }
+  .back-btn { background: transparent; border: none; color: #FFD700; font-size: 1.4rem; cursor: pointer; font-weight: 700; padding: 4px 8px; }
+
+  .hero { padding: 32px 20px 24px; background: linear-gradient(180deg, rgba(255, 215, 0, 0.08) 0%, transparent 100%); position: relative; overflow: hidden; }
+  .hero .script { font-family: 'Caveat', cursive; color: #FFD700; font-size: 1.1rem; margin-bottom: 6px; display: inline-block; }
+  .hero h1 { font-size: 2rem; font-weight: 800; line-height: 1.1; margin-bottom: 12px; }
+  .hero h1 .white { color: #fff; }
+  .hero h1 .gold { color: #FFD700; }
+  .hero .desc { color: #ccc; font-size: 0.9rem; line-height: 1.5; margin-bottom: 22px; max-width: 95%; }
+  .features-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+  .features-row::-webkit-scrollbar { display: none; }
+  .feature-badge { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 88px; padding: 12px 10px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; }
+  .feature-badge .fb-icon { font-size: 1.3rem; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: rgba(255, 215, 0, 0.12); border-radius: 10px; }
+  .feature-badge .fb-label { font-size: 0.68rem; font-weight: 600; color: #ccc; text-align: center; line-height: 1.25; }
+
+  .layout { padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+
+  .sidebar { background: #111; border: 1px solid rgba(255, 215, 0, 0.15); border-radius: 20px; padding: 24px 20px; }
+  .sidebar .script { font-family: 'Caveat', cursive; color: #FFD700; font-size: 1.6rem; line-height: 1.1; margin-bottom: 12px; display: inline-block; }
+  .sidebar p { color: #999; font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px; }
+  .sidebar .perk { display: flex; gap: 12px; margin-bottom: 16px; align-items: flex-start; }
+  .sidebar .perk .perk-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: rgba(255, 215, 0, 0.12); border-radius: 8px; font-size: 1rem; flex-shrink: 0; }
+  .sidebar .perk .perk-text { flex: 1; }
+  .sidebar .perk .perk-title { font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .sidebar .perk .perk-desc { font-size: 0.72rem; color: #888; line-height: 1.4; }
+  .sidebar .build-tagline { font-family: 'Caveat', cursive; color: #FFD700; font-size: 1.2rem; text-align: center; margin-top: 20px; line-height: 1.3; }
+
+  .form-card { background: #111; border: 1px solid rgba(255, 215, 0, 0.15); border-radius: 20px; padding: 24px 20px; }
+
+  .steps { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 26px; position: relative; }
+  .steps::before { content: ''; position: absolute; top: 16px; left: 20px; right: 20px; height: 2px; background: rgba(255,255,255,0.06); z-index: 0; }
+  .step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; z-index: 1; }
+  .step .step-num { width: 32px; height: 32px; border-radius: 50%; background: #222; color: #666; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; transition: all 0.3s; border: 2px solid #222; }
+  .step .step-label { font-size: 0.62rem; color: #666; font-weight: 600; text-align: center; line-height: 1.2; }
+  .step.active .step-num { background: #FFD700; color: #000; border-color: #FFD700; box-shadow: 0 0 16px rgba(255, 215, 0, 0.5); }
+  .step.active .step-label { color: #FFD700; }
+  .step.done .step-num { background: rgba(80, 220, 120, 0.15); color: #4ade80; border-color: #4ade80; }
+  .step.done .step-label { color: #4ade80; }
+
+  .form-title-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .form-title-icon { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: rgba(255, 215, 0, 0.12); border-radius: 14px; font-size: 1.5rem; }
+  .form-title-text h2 { font-size: 1.15rem; font-weight: 800; color: #fff; margin-bottom: 2px; }
+  .form-title-text p { font-size: 0.78rem; color: #888; }
+
+  .form-step-panel { display: none; }
+  .form-step-panel.active { display: block; }
+
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 0.8rem; color: #ddd; margin-bottom: 8px; font-weight: 600; }
+  .form-group label .req { color: #FFD700; }
+  .input-wrap { position: relative; display: flex; align-items: center; }
+  .input-wrap svg { position: absolute; left: 14px; width: 18px; height: 18px; fill: #666; }
+  .input-wrap input,
+  .input-wrap select,
+  .input-wrap textarea { width: 100%; padding: 14px 14px 14px 42px; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 12px; color: #fff; font-size: 0.9rem; font-family: 'Poppins', sans-serif; outline: none; transition: border 0.2s; }
+  .input-wrap textarea { padding-left: 42px; resize: vertical; min-height: 100px; }
+  .input-wrap input:focus,
+  .input-wrap select:focus,
+  .input-wrap textarea:focus { border-color: #FFD700; box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.08); }
+  .input-wrap input::placeholder,
+  .input-wrap textarea::placeholder { color: #555; }
+  .input-wrap select { appearance: none; cursor: pointer; }
+  .input-wrap select option { background: #151515; color: #fff; }
+
+  .upload-zone { border: 2px dashed #2a2a2a; border-radius: 14px; padding: 30px 20px; text-align: center; cursor: pointer; transition: border 0.2s, background 0.2s; margin-bottom: 14px; }
+  .upload-zone:active { background: rgba(255, 215, 0, 0.03); }
+  .upload-zone .uz-icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .upload-zone .uz-title { font-size: 0.85rem; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .upload-zone .uz-sub { font-size: 0.72rem; color: #666; }
+  .upload-zone input[type=file] { display: none; }
+  .upload-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .preview-item { position: relative; width: 70px; height: 70px; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
+  .preview-item img { width: 100%; height: 100%; object-fit: cover; }
+  .preview-item .remove { position: absolute; top: 2px; right: 2px; background: rgba(0,0,0,0.7); border: none; color: #fff; width: 20px; height: 20px; border-radius: 50%; font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+  .review-block { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+  .review-block .rv-label { font-size: 0.7rem; color: #FFD700; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .review-block .rv-value { font-size: 0.9rem; color: #fff; line-height: 1.4; }
+
+  /* ===== STICKY FORM NAV ===== */
+  .form-nav {
+    display: flex;
+    gap: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0f0f0f;
+    padding: 16px 20px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(255, 215, 0, 0.2);
+    z-index: 200;
+    box-shadow: 0 -8px 20px rgba(0,0,0,0.5);
+  }
+
+  .btn { flex: 1; padding: 16px; border-radius: 14px; font-size: 0.95rem; font-weight: 700; font-family: 'Poppins', sans-serif; cursor: pointer; border: none; transition: transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; box-shadow: 0 0 25px rgba(255, 215, 0, 0.4); }
+  .btn-secondary { background: #1a1a1a; color: #fff; border: 1px solid #2a2a2a; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .message { margin-top: 16px; padding: 12px; border-radius: 10px; font-size: 0.85rem; text-align: center; display: none; }
+  .message.show { display: block; }
+  .message.error { background: rgba(255, 60, 60, 0.1); border: 1px solid rgba(255, 60, 60, 0.3); color: #ff6b6b; }
+  .message.success { background: rgba(80, 220, 120, 0.1); border: 1px solid rgba(80, 220, 120, 0.3); color: #4ade80; }
+
+  .footer { text-align: center; padding: 30px 20px; margin-top: 20px; }
+  .footer .chips { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; flex-wrap: wrap; }
+  .footer .chip { font-size: 0.72rem; color: #666; display: flex; align-items: center; gap: 6px; }
+  .footer .chip span { color: #FFD700; }
+  .footer .tagline { font-family: 'Caveat', cursive; color: #FFD700; font-size: 1.1rem; }
+
+  .loading-screen { position: fixed; inset: 0; background: #0a0a0a; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; z-index: 9999; }
+  .loading-screen .spinner { width: 40px; height: 40px; border: 3px solid rgba(255, 215, 0, 0.2); border-top-color: #FFD700; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-screen p { color: #888; font-size: 0.9rem; }
+
+  @media (min-width: 768px) {
+    .layout { flex-direction: row; max-width: 1100px; margin: 0 auto; }
+    .sidebar { width: 320px; flex-shrink: 0; }
+    .form-card { flex: 1; }
+    .form-nav { position: sticky; bottom: 20px; left: auto; right: auto; max-width: 720px; margin: 0 auto; border-radius: 16px; border: 1px solid rgba(255, 215, 0, 0.2); }
+  }
+</style>
+</head>
+<body>
+
+<div class="loading-screen" id="loadingScreen">
+  <div class="spinner"></div>
+  <p>Loading...</p>
+</div>
+
+<div class="header">
+  <button class="back-btn" onclick="goBack()">←</button>
+  <div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div>
+  <div style="width: 30px;"></div>
+</div>
+
+<div class="hero">
+  <div class="script">Grow Your Business on Campus</div>
+  <h1><span class="white">Vendor</span> <span class="gold">Registration</span></h1>
+  <div class="desc">Join UniBuzz as a vendor and get your business in front of thousands of students on campus.</div>
+  <div class="features-row">
+    <div class="feature-badge"><div class="fb-icon">👥</div><div class="fb-label">Reach More Students</div></div>
+    <div class="feature-badge"><div class="fb-icon">📈</div><div class="fb-label">Grow Your Sales</div></div>
+    <div class="feature-badge"><div class="fb-icon">🛡️</div><div class="fb-label">Trusted & Verified</div></div>
+    <div class="feature-badge"><div class="fb-icon">⚡</div><div class="fb-label">Fast & Easy Setup</div></div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="script">Small Business.<br>Big Opportunities.</div>
+    <p>Whether you sell food, fashion, tech, services or anything students love — UniBuzz helps you connect, sell and grow on campus.</p>
+
+    <div class="perk">
+      <div class="perk-icon">🏷️</div>
+      <div class="perk-text"><div class="perk-title">Free Listing</div><div class="perk-desc">Get started at no cost.</div></div>
+    </div>
+    <div class="perk">
+      <div class="perk-icon">👁️</div>
+      <div class="perk-text"><div class="perk-title">Campus Exposure</div><div class="perk-desc">Be seen by thousands of students.</div></div>
+    </div>
+    <div class="perk">
+      <div class="perk-icon">⚙️</div>
+      <div class="perk-text"><div class="perk-title">Easy Management</div><div class="perk-desc">Update your business anytime.</div></div>
+    </div>
+    <div class="perk">
+      <div class="perk-icon">🎧</div>
+      <div class="perk-text"><div class="perk-title">Support</div><div class="perk-desc">We're here to help you every step.</div></div>
+    </div>
+
+    <div class="build-tagline">Let's build the<br>campus market<br>together!</div>
+  </div>
+
+  <div class="form-card">
+    <div class="steps">
+      <div class="step active" id="stepInd1"><div class="step-num">1</div><div class="step-label">Business Info</div></div>
+      <div class="step" id="stepInd2"><div class="step-num">2</div><div class="step-label">Location</div></div>
+      <div class="step" id="stepInd3"><div class="step-num">3</div><div class="step-label">Images</div></div>
+      <div class="step" id="stepInd4"><div class="step-num">4</div><div class="step-label">Review</div></div>
+    </div>
+
+    <div class="form-title-row">
+      <div class="form-title-icon">🏪</div>
+      <div class="form-title-text">
+        <h2>Vendor Registration</h2>
+        <p>Fill in your business details to get started.</p>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="form-step-panel active" id="panel1">
+      <div class="form-group">
+        <label>Business Name <span class="req">*</span></label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4v2h16V4zm0 6H4v10h16V10zm-8 7c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+          <input type="text" id="bizName" placeholder="e.g. Chinchin Corner">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Category <span class="req">*</span></label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zm9 0h7v7h-7zm-9 9h7v7H4zm9 0h7v7h-7z"/></svg>
+          <select id="bizCategory">
+            <option value="">Select category</option>
+            <option value="Food">🍲 Food</option>
+            <option value="Laundry">🧺 Laundry</option>
+            <option value="Printing">🖨️ Printing</option>
+            <option value="Accommodation">🏠 Accommodation</option>
+            <option value="Transport">🚌 Transport</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Contact Phone Number <span class="req">*</span></label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          <input type="tel" id="bizPhone" placeholder="e.g. 08012345678">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Business Description <span class="req">*</span></label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" style="top: 14px; transform: none;"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg>
+          <textarea id="bizDesc" placeholder="Tell us about your business, what you sell and what makes you unique..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="form-step-panel" id="panel2">
+      <div class="form-group">
+        <label>Location <span class="req">*</span></label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          <select id="bizLocation">
+            <option value="">Select location</option>
+            <option value="South Gate">South Gate</option>
+            <option value="North Gate">North Gate</option>
+            <option value="Main Gate">Main Gate</option>
+            <option value="SUB Area">SUB Area</option>
+            <option value="Campus Road">Campus Road</option>
+            <option value="Hostel Road">Hostel Road</option>
+            <option value="Off-campus">Off-campus</option>
+            <option value="Everywhere">Everywhere (mobile)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Price Range (optional)</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1.99.69 1.6 2.05 1.6 1.29 0 1.9-.5 1.9-1.35 0-.83-.62-1.14-2.06-1.52-2.05-.51-3.79-1.27-3.79-3.51 0-1.85 1.33-2.86 3.19-3.19V6h2.67v1.76c1.5.29 2.77 1.26 2.92 3.02h-1.94c-.13-.89-.64-1.44-1.87-1.44-1.15 0-1.65.56-1.65 1.24 0 .79.58 1.1 2.19 1.51 2.15.52 3.67 1.32 3.67 3.53 0 1.93-1.4 2.97-3.3 3.27z"/></svg>
+          <input type="text" id="bizPrice" placeholder="e.g. ₦500 - ₦1500">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Additional Address Info (optional)</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" style="top: 14px; transform: none;"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg>
+          <textarea id="bizAddress" placeholder="e.g. Beside ABC building, opposite the market..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="form-step-panel" id="panel3">
+      <div class="form-group">
+        <label>Upload Business Images (optional)</label>
+        <div class="upload-zone" onclick="document.getElementById('bizImages').click()">
+          <div class="uz-icon">📷</div>
+          <div class="uz-title">Tap to upload business photo</div>
+          <div class="uz-sub">JPG, PNG (Max 5MB)</div>
+          <input type="file" id="bizImages" accept="image/*" onchange="handleImageUpload(event)">
+        </div>
+        <div class="upload-preview" id="imgPreview"></div>
+        <p style="font-size:0.72rem;color:#666;margin-top:8px;">Optional — but businesses with photos get 3x more views. 📈</p>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="form-step-panel" id="panel4">
+      <div class="review-block"><div class="rv-label">Business Name</div><div class="rv-value" id="rvName">--</div></div>
+      <div class="review-block"><div class="rv-label">Category</div><div class="rv-value" id="rvCategory">--</div></div>
+      <div class="review-block"><div class="rv-label">Location</div><div class="rv-value" id="rvLocation">--</div></div>
+      <div class="review-block"><div class="rv-label">Contact</div><div class="rv-value" id="rvPhone">--</div></div>
+      <div class="review-block"><div class="rv-label">Description</div><div class="rv-value" id="rvDesc">--</div></div>
+      <div class="review-block"><div class="rv-label">Price Range</div><div class="rv-value" id="rvPrice">--</div></div>
+      <div class="review-block" id="rvImgBlock" style="display:none;"><div class="rv-label">Business Photo</div><div class="rv-value" id="rvImgStatus">✅ Uploaded</div></div>
+      <div style="padding:14px;background:rgba(255,215,0,0.06);border:1px solid rgba(255,215,0,0.2);border-radius:12px;margin-top:16px;">
+        <div style="font-size:0.85rem;color:#FFD700;font-weight:700;margin-bottom:6px;">⏳ Pending Approval</div>
+        <div style="font-size:0.78rem;color:#999;line-height:1.5;">Your listing will be reviewed by UniBuzz admin before it goes live. You'll be notified once approved.</div>
+      </div>
+    </div>
+
+    <div class="message" id="message"></div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="chips">
+    <div class="chip">🔒 <span>Safe</span></div>
+    <div class="chip">✅ <span>Legit</span></div>
+    <div class="chip">🎓 <span>Student Approved</span></div>
+  </div>
+  <div class="tagline">UniBuzz — Know the Buzz</div>
+</div>
+
+<!-- STICKY NAV — always visible -->
+<div class="form-nav">
+  <button class="btn btn-secondary" id="prevBtn" onclick="prevStep()" style="display:none;">← Back</button>
+  <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+    <span id="nextBtnText">Next Step</span> →
+  </button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://wrjdtcmzccgrmufinxbo.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_vNJRQlZeNWcMl6crV8tOYQ_d_x-13pC';
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  let currentUser = null;
+  let currentStep = 1;
+  let uploadedImageFile = null;
+
+  async function init() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) { window.location.href = 'index.html'; return; }
+    currentUser = session.user;
+
+    const { data: vendor } = await supabaseClient
+      .from('vendors').select('*').eq('user_id', currentUser.id).maybeSingle();
+
+    if (vendor && vendor.business_name && vendor.business_name !== 'My Business') {
+      document.getElementById('bizName').value = vendor.business_name || '';
+      document.getElementById('bizCategory').value = vendor.category || '';
+      document.getElementById('bizPhone').value = vendor.contact || '';
+      document.getElementById('bizDesc').value = vendor.description || '';
+      document.getElementById('bizLocation').value = vendor.location || '';
+      document.getElementById('bizPrice').value = vendor.price || '';
+    }
+
+    document.getElementById('loadingScreen').style.display = 'none';
+  }
+
+  function goToStep(step) {
+    document.querySelectorAll('.form-step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel' + step).classList.add('active');
+
+    for (let i = 1; i <= 4; i++) {
+      const ind = document.getElementById('stepInd' + i);
+      ind.classList.remove('active', 'done');
+      if (i < step) ind.classList.add('done');
+      if (i === step) ind.classList.add('active');
+    }
+
+    document.getElementById('prevBtn').style.display = step === 1 ? 'none' : 'flex';
+    const nextBtnText = document.getElementById('nextBtnText');
+    if (step === 4) {
+      nextBtnText.textContent = 'Submit Registration';
+    } else {
+      nextBtnText.textContent = 'Next Step';
+    }
+
+    if (step === 4) populateReview();
+
+    currentStep = step;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function nextStep() {
+    if (currentStep === 1) {
+      const name = document.getElementById('bizName').value.trim();
+      const cat = document.getElementById('bizCategory').value;
+      const phone = document.getElementById('bizPhone').value.trim();
+      const desc = document.getElementById('bizDesc').value.trim();
+      if (!name || !cat || !phone || !desc) { showMsg('Please fill in all required fields', 'error'); return; }
+      hideMsg();
+      goToStep(2);
+    } else if (currentStep === 2) {
+      const loc = document.getElementById('bizLocation').value;
+      if (!loc) { showMsg('Please select a location', 'error'); return; }
+      hideMsg();
+      goToStep(3);
+    } else if (currentStep === 3) {
+      hideMsg();
+      goToStep(4);
+    } else if (currentStep === 4) {
+      submitRegistration();
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 1) goToStep(currentStep - 1);
+  }
+
+  function handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showMsg('Image too large (max 5MB)', 'error'); return; }
+    uploadedImageFile = file;
+    const preview = document.getElementById('imgPreview');
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      preview.innerHTML = `<div class="preview-item"><img src="${ev.target.result}" alt="preview"><button class="remove" onclick="removeImage(event)">✕</button></div>`;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeImage(e) {
+    e.stopPropagation();
+    uploadedImageFile = null;
+    document.getElementById('imgPreview').innerHTML = '';
+    document.getElementById('bizImages').value = '';
+  }
+
+  function populateReview() {
+    document.getElementById('rvName').textContent = document.getElementById('bizName').value || '--';
+    document.getElementById('rvCategory').textContent = document.getElementById('bizCategory').value || '--';
+    document.getElementById('rvLocation').textContent = document.getElementById('bizLocation').value || '--';
+    document.getElementById('rvPhone').textContent = document.getElementById('bizPhone').value || '--';
+    document.getElementById('rvDesc').textContent = document.getElementById('bizDesc').value || '--';
+    document.getElementById('rvPrice').textContent = document.getElementById('bizPrice').value || 'Not specified';
+    document.getElementById('rvImgBlock').style.display = uploadedImageFile ? 'block' : 'none';
+  }
+
+  async function submitRegistration() {
+    const btn = document.getElementById('nextBtn');
+    btn.disabled = true;
+    document.getElementById('nextBtnText').textContent = 'Submitting...';
+    hideMsg();
+
+    try {
+      let imageUrl = null;
+      if (uploadedImageFile) {
+        const fileName = `vendor_${currentUser.id}_${Date.now()}_${uploadedImageFile.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+        const { error: upErr } = await supabaseClient.storage.from('materials').upload(fileName, uploadedImageFile);
+        if (!upErr) {
+          const { data: urlData } = supabaseClient.storage.from('materials').getPublicUrl(fileName);
+          imageUrl = urlData.publicUrl;
+        }
+      }
+
+      const { data: existing } = await supabaseClient
+        .from('vendors').select('id').eq('user_id', currentUser.id).maybeSingle();
+
+      const vendorData = {
+        user_id: currentUser.id,
+        business_name: document.getElementById('bizName').value.trim(),
+        category: document.getElementById('bizCategory').value,
+        location: document.getElementById('bizLocation').value,
+        price: document.getElementById('bizPrice').value.trim() || null,
+        contact: document.getElementById('bizPhone').value.trim(),
+        description: document.getElementById('bizDesc').value.trim(),
+        image_url: imageUrl,
+        status: 'pending'
+      };
+
+      if (existing) {
+        const { error } = await supabaseClient.from('vendors').update(vendorData).eq('id', existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabaseClient.from('vendors').insert(vendorData);
+        if (error) throw error;
+      }
+
+      showMsg('✅ Registration submitted! Awaiting admin approval.', 'success');
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 2200);
+
+    } catch (err) {
+      console.error(err);
+      showMsg('Submission failed: ' + (err.message || 'Unknown error'), 'error');
+      btn.disabled = false;
+      document.getElementById('nextBtnText').textContent = 'Submit Registration';
+    }
+  }
+
+  function showMsg(text, type) {
+    const m = document.getElementById('message');
+    m.textContent = text;
+    m.className = 'message show ' + type;
+  }
+  function hideMsg() { document.getElementById('message').className = 'message'; }
+  function goBack() { window.location.href = 'dashboard.html'; }
+
+  init();
+</script>
+</body>
+</html>
