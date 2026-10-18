@@ -45,6 +45,9 @@
   .welcome-text h1 span { color: #FFD700; }
   .welcome-text p { color: #888; font-size: 0.9rem; }
   .avatar-btn { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid rgba(255, 215, 0, 0.3); flex-shrink: 0; }
+.avatar-btn img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+  .avatar-cam-badge { position: absolute; bottom: -2px; right: -2px; width: 20px; height: 20px; border-radius: 50%; background: #A855F7; color: #fff; font-size: 0.65rem; display: flex; align-items: center; justify-content: center; z-index: 5; border: 2px solid #0a0a0a; pointer-events: none; }
+  .avatar-wrapper { position: relative; display: inline-flex; }
 
   .section-title { padding: 20px 20px 10px; font-size: 1.1rem; font-weight: 700; color: #FFD700; display: flex; align-items: center; gap: 8px; justify-content: space-between; }
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 0 20px; }
@@ -200,8 +203,34 @@
   .trend-pill.active .hash { color: #fff; }
 
   .tweet-feed { padding: 0; }
-  .tweet { background: #0a0a0a; border-bottom: 1px solid #1a1a1a; padding: 14px 20px; cursor: pointer; transition: background 0.15s; position: relative; }
-  .tweet:active { background: #131313; }
+  .tweet { background: #0a0a0a; border-bottom: 1px solid #1a1a1a; padding: 14px 20px; cursor: pointer; transition: background 0.15s; }
+  .tweet:active { background: #101010; }
+  /* UniBuzz Community: cleaner X-inspired feed */
+  .community-hero { padding: 25px 20px 17px; background: linear-gradient(180deg, rgba(168,85,247,.08), transparent); }
+  .community-hero h1 { letter-spacing: -1px; }
+  .compose-bar { background: #080808; }
+  .community-topbar { display:flex; align-items:center; justify-content:space-between; }
+  .community-title { color:#fff; font-size:1.18rem; font-weight:800; text-align:center; flex:1; }
+  .community-title span { color:#A855F7; }
+  .community-notifications { border:0; background:transparent; font-size:1.35rem; cursor:pointer; width:34px; }
+  .community-topbar .back-btn { color:#FFD700; }
+  .compose-bar .compose-btn { background:#FFD700; color:#000; padding:12px 22px; font-size:.9rem; }
+  .compose-bar .compose-input.placeholder { color:#777; }
+  .tweet { padding: 17px 18px; }
+  .tweet:hover { background: #0e0e0e; }
+  .tweet-avatar { overflow:hidden; border:1px solid rgba(255,215,0,.22); }
+  .tweet-avatar img { width:100%; height:100%; object-fit:cover; }
+  .tweet-header { gap: 6px; }
+  .verified-tick { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; border-radius:50%; background:#1d9bf0; color:#fff; font-size:11px; font-weight:900; line-height:1; vertical-align:middle; flex-shrink:0; }
+  .admin-label { display:inline-flex; align-items:center; gap:3px; color:#FFD700; border:1px solid rgba(255,215,0,.28); background:rgba(255,215,0,.08); border-radius:5px; padding:2px 5px; font-size:10px; font-weight:800; letter-spacing:.2px; }
+  .tweet-media { display:block; width:100%; max-height:420px; object-fit:cover; border:1px solid #292929; border-radius:16px; margin:10px 0 12px; background:#111; }
+  .cm-media-tools { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:0 20px 14px 74px; }
+  .cm-media-btn { display:inline-flex; align-items:center; gap:7px; color:#c084fc; background:rgba(168,85,247,.09); border:1px solid rgba(168,85,247,.25); border-radius:20px; padding:8px 12px; font:600 .8rem 'Poppins',sans-serif; cursor:pointer; }
+  .cm-image-preview { display:none; position:relative; margin:0 20px 14px 74px; width:calc(100% - 94px); }
+  .cm-image-preview img { display:block; max-width:100%; max-height:220px; border-radius:14px; border:1px solid #333; }
+  .cm-image-remove { position:absolute; top:7px; right:7px; border:0; border-radius:50%; width:30px; height:30px; color:#fff; background:rgba(0,0,0,.8); font-size:18px; cursor:pointer; }
+  @media (max-width:480px) { .tweet { padding:15px 14px; } .cm-media-tools { padding-left:72px; } .cm-image-preview { margin-left:72px; width:calc(100% - 86px); } }
+
   .tweet-top { display: flex; gap: 12px; align-items: flex-start; }
   .tweet-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-weight: 800; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .tweet-main { flex: 1; min-width: 0; }
@@ -218,28 +247,19 @@
   .tweet-action.repost:hover { color: #4ade80; background: rgba(74, 222, 128, 0.08); }
   .tweet-action.liked { color: #F43F5E; }
   .tweet-action.reposted { color: #4ade80; }
-
-  .tweet-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-  .tweet-menu-btn { background: transparent; border: none; color: #666; font-size: 1.1rem; font-weight: 700; padding: 2px 8px; border-radius: 50%; cursor: pointer; line-height: 1; flex-shrink: 0; font-family: 'Poppins', sans-serif; transition: background 0.15s, color 0.15s; }
-  .tweet-menu-btn:active { background: rgba(168,85,247,0.15); color: #A855F7; }
-  .tweet-menu-popup { position: absolute; right: 16px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 6px; min-width: 160px; box-shadow: 0 8px 24px rgba(0,0,0,0.7); z-index: 500; }
-  .tweet-menu-popup button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; background: transparent; border: none; color: #ddd; font-size: 0.85rem; font-family: 'Poppins', sans-serif; font-weight: 500; text-align: left; border-radius: 8px; cursor: pointer; }
-  .tweet-menu-popup button:active { background: rgba(255,255,255,0.05); }
-  .tweet-menu-popup button.danger { color: #ff6b6b; }
-  .tweet-menu-popup button.danger:active { background: rgba(255,60,60,0.1); }
-
-  .report-reasons { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
-  .report-reason-btn { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 10px; color: #ddd; font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 500; text-align: left; cursor: pointer; }
-  .report-reason-btn:active { background: #131313; }
-  .report-reason-btn.selected { border-color: #A855F7; background: rgba(168,85,247,0.1); color: #fff; }
-  .report-reason-btn .rr-emoji { font-size: 1.1rem; }
-
-  .report-admin-card { background: #131313; border: 1px solid rgba(244, 63, 94, 0.3); border-left: 4px solid #F43F5E; border-radius: 14px; padding: 16px; margin-bottom: 12px; }
-  .report-admin-card.resolved { border-color: #262626; border-left-color: #4ade80; opacity: 0.7; }
-  .report-admin-card .ra-reason { display: inline-block; font-size: 0.65rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; background: rgba(244, 63, 94, 0.2); color: #F43F5E; margin-bottom: 8px; }
-  .report-admin-card .ra-post { font-size: 0.85rem; color: #ddd; line-height: 1.4; margin-bottom: 10px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; }
-  .report-admin-card .ra-meta { font-size: 0.72rem; color: #888; margin-bottom: 10px; }
-  .report-admin-card .ra-actions { display: flex; gap: 6px; }
+  .tweet-menu-wrap { position:relative; margin-left:auto; flex-shrink:0; }
+  .tweet-menu-trigger { display:flex; align-items:center; justify-content:center; width:32px; height:32px; border:0; border-radius:50%; background:transparent; color:#888; font-size:22px; line-height:1; cursor:pointer; }
+  .tweet-menu-trigger:hover, .tweet-menu-trigger[aria-expanded="true"] { color:#FFD700; background:rgba(255,215,0,.09); }
+  .tweet-menu { display:none; position:absolute; right:0; top:34px; z-index:20; min-width:150px; padding:6px; background:#171717; border:1px solid #303030; border-radius:12px; box-shadow:0 10px 28px rgba(0,0,0,.45); }
+  .tweet-menu.open { display:block; }
+  .tweet-menu button { display:flex; width:100%; align-items:center; gap:9px; padding:10px 11px; border:0; border-radius:8px; background:transparent; color:#eee; text-align:left; font:500 .82rem 'Poppins',sans-serif; cursor:pointer; white-space:nowrap; }
+  .tweet-menu button:hover { background:#252525; }
+  .tweet-menu .report-post { color:#fbbf24; }
+  .tweet-menu .delete-post { color:#fb7185; }
+  .feed-tabs { display:flex; border-bottom:1px solid #252525; background:#080808; }
+  .feed-tab { flex:1; border:0; background:transparent; color:#888; padding:15px 10px 12px; font:700 .9rem 'Poppins',sans-serif; cursor:pointer; position:relative; }
+  .feed-tab.active { color:#fff; }
+  .feed-tab.active:after { content:''; position:absolute; height:3px; width:64px; max-width:70%; left:50%; bottom:0; transform:translateX(-50%); border-radius:4px 4px 0 0; background:#FFD700; }
 
   .thread-tweet { padding: 16px 20px; border-bottom: 1px solid #1a1a1a; }
   .thread-tweet .tweet-top { gap: 14px; }
@@ -262,6 +282,8 @@
   .reply-box .reply-box-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .reply-box textarea { flex: 1; padding: 10px 14px; background: #131313; border: 1px solid #262626; border-radius: 20px; color: #fff; font-size: 0.9rem; font-family: 'Poppins', sans-serif; outline: none; resize: none; min-height: 40px; max-height: 100px; }
   .reply-box textarea:focus { border-color: #A855F7; }
+#postDetailView { min-height: 100vh; display: flex; flex-direction: column; }
+#repliesList { flex: 1; }
   .reply-box .reply-submit { background: #A855F7; color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; font-weight: 700; font-size: 1rem; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 
   .compose-modal { background: #0a0a0a; border: 1px solid #262626; border-radius: 20px; padding: 0; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; }
@@ -422,7 +444,15 @@
   .pin-toggle input { width: auto; margin: 0; }
   .pin-toggle label { margin: 0; color: #FFD700; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
 
-  .loading-screen { position: fixed; inset: 0; background: #0a0a0a; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; z-index: 9999; }
+ .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0a0a0a; border-top: 1px solid #1a1a1a; display: none; justify-content: space-around; align-items: center; padding: 8px 8px calc(8px + env(safe-area-inset-bottom)); z-index: 100; box-shadow: 0 -4px 20px rgba(0,0,0,0.5); }
+  .bottom-nav.show { display: flex; }
+  .bn-item { flex: 1; background: transparent; border: none; color: #666; font-family: 'Poppins', sans-serif; font-size: 0.65rem; font-weight: 600; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 4px; }
+  .bn-item .bn-ico { font-size: 1.3rem; line-height: 1; }
+  .bn-item.active { color: #FFD700; }
+  .bn-item.compose { flex: 0 0 auto; }
+  .bn-item.compose .bn-ico { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(255,215,0,0.4); margin-top: -20px; }
+  body.has-bottom-nav { padding-bottom: 90px; }
+ .loading-screen { position: fixed; inset: 0; background: #0a0a0a; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; z-index: 9999; }
   .loading-screen .spinner { width: 40px; height: 40px; border: 3px solid rgba(255, 215, 0, 0.2); border-top-color: #FFD700; border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-screen p { color: #888; font-size: 0.9rem; }
@@ -445,6 +475,253 @@
   .search-result-card .sr-author { color: #A855F7; font-weight: 600; }
   .search-result-card .sr-text { font-size: 0.85rem; color: #ddd; line-height: 1.4; }
 </style>
+
+<style id="unibuzz-materials-redesign">
+/* UniBuzz Materials — visual refresh, preserving existing IDs and JavaScript */
+:root {
+  --ub-gold: #ffd928;
+  --ub-amber: #ffb52e;
+  --ub-bg: #080909;
+  --ub-panel: #111416;
+  --ub-border: rgba(255,255,255,.10);
+  --ub-muted: #9ba2ad;
+}
+html { background: var(--ub-bg); }
+body {
+  background:
+    radial-gradient(ellipse at 85% 35%, rgba(255,190,30,.055), transparent 34%),
+    radial-gradient(ellipse at 5% 82%, rgba(255,215,40,.035), transparent 30%),
+    var(--ub-bg);
+}
+#academicsView { min-height: 100vh; position: relative; isolation: isolate; overflow: hidden; padding-bottom: 36px; }
+#academicsView::before {
+  content: ""; position: fixed; z-index: -1; pointer-events: none;
+  width: 260px; height: 260px; border-radius: 50%;
+  right: -170px; top: 34%; background: rgba(255,210,35,.055); filter: blur(42px);
+}
+#academicsView > .header {
+  min-height: 96px; padding: 22px 22px; background: rgba(10,11,11,.92);
+  border-bottom: 1px solid rgba(255,217,40,.18); backdrop-filter: blur(18px);
+}
+#academicsView > .header .back-btn {
+  width: 48px; height: 48px; border-radius: 16px; display: grid; place-items: center;
+  border: 1px solid rgba(255,217,40,.25); background: linear-gradient(145deg,#191a17,#0c0d0c);
+  font-size: 2rem; line-height: 1; padding: 0; box-shadow: 0 6px 22px rgba(0,0,0,.28);
+}
+#academicsView > .header .logo-text { font-size: 1.7rem; letter-spacing: -1px; }
+#academicsView > .header .logo-text .buzz { color: var(--ub-gold); }
+#academicsView > .inner-toggle {
+  margin: 22px 20px 0; padding: 6px; gap: 8px; flex-wrap: nowrap;
+  border: 1px solid rgba(255,217,40,.2); border-radius: 24px;
+  background: rgba(22,24,24,.88); box-shadow: 0 12px 34px rgba(0,0,0,.22);
+}
+#academicsView .toggle-btn {
+  min-width: 0; min-height: 62px; padding: 14px 10px; border-radius: 17px;
+  border: 1px solid transparent; background: transparent; color: #9298a1;
+  font-size: .9rem; font-weight: 700; transition: transform .2s, box-shadow .2s, background .2s;
+}
+#academicsView .toggle-btn.active {
+  background: linear-gradient(120deg, #ffe34a 0%, #ffc32d 100%); color: #10100a;
+  border-color: rgba(255,255,255,.25); box-shadow: 0 6px 22px rgba(255,197,35,.18);
+}
+#academicsView .toggle-btn:active { transform: scale(.98); }
+#materialsSubView .hero, #timetableSubView .hero {
+  position: relative; padding: 36px 24px 18px;
+}
+#materialsSubView .hero h1, #timetableSubView .hero h1 {
+  display: flex; align-items: center; gap: 10px; font-size: clamp(1.85rem,7vw,2.45rem);
+  line-height: 1.15; letter-spacing: -.8px; font-weight: 800; margin-bottom: 10px;
+}
+#materialsSubView .hero h1 span, #timetableSubView .hero h1 span {
+  color: #fff; background: linear-gradient(100deg,#fff 20%,#ffe45b 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+#materialsSubView .hero p, #timetableSubView .hero p {
+  color: var(--ub-muted); font-size: .91rem; line-height: 1.55; max-width: 330px;
+}
+#materialsSubView .hero::after {
+  content: ""; display: block; width: 62px; height: 5px; border-radius: 10px;
+  background: linear-gradient(90deg,var(--ub-gold),var(--ub-amber)); margin-top: 20px;
+  box-shadow: 0 0 20px rgba(255,217,40,.28);
+}
+#materialsSubView .upload-btn, #timetableSubView .upload-btn {
+  position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; width: calc(100% - 40px); min-height: 112px; margin: 16px 20px 22px;
+  padding: 20px 22px; text-align: left; border-radius: 24px;
+  background: linear-gradient(115deg,#ffe94f 0%,#ffd12f 55%,#ffb52c 100%);
+  color: #10100a; font-size: 1.05rem; font-weight: 800; border: 1px solid rgba(255,255,255,.28);
+  box-shadow: 0 12px 34px rgba(255,191,27,.16); transition: transform .18s, box-shadow .2s;
+}
+#materialsSubView .upload-btn::before {
+  content: "☁"; display: grid; place-items: center; flex: 0 0 56px; height: 56px;
+  border-right: 1px solid rgba(0,0,0,.16); padding-right: 18px; font-size: 2.4rem; line-height: 1;
+}
+#materialsSubView .upload-btn::after {
+  content: "→"; display: grid; place-items: center; width: 44px; height: 44px; flex: 0 0 44px;
+  border-radius: 50%; background: #11120f; color: var(--ub-gold); font-size: 1.65rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,.18);
+}
+#materialsSubView .upload-btn:active, #timetableSubView .upload-btn:active {
+  transform: scale(.985); box-shadow: 0 6px 18px rgba(255,191,27,.18);
+}
+#materialsSubView .search-wrap { padding: 0 20px 10px; }
+#materialsSubView .search-wrap input {
+  min-height: 62px; padding: 16px 20px; border-radius: 20px;
+  background: linear-gradient(135deg,rgba(24,27,29,.98),rgba(13,15,16,.98));
+  border: 1px solid rgba(255,255,255,.13); color: #fff; font-size: .9rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025); transition: border-color .2s, box-shadow .2s;
+}
+#materialsSubView .search-wrap input:focus {
+  border-color: rgba(255,217,40,.62); box-shadow: 0 0 0 3px rgba(255,217,40,.08);
+}
+#materialsSubView .search-wrap input::placeholder { color: #a4aab3; opacity: 1; }
+#materialsSubView .materials-list, #timetableSubView .timetable-list { padding: 12px 20px; }
+#materialsSubView .material-item {
+  position: relative; overflow: hidden; min-height: 132px; padding: 22px 18px 20px 22px;
+  margin-bottom: 14px; gap: 14px; border-radius: 24px;
+  background: linear-gradient(125deg,rgba(20,23,25,.98),rgba(12,14,15,.98));
+  border: 1px solid rgba(255,255,255,.13); box-shadow: 0 12px 30px rgba(0,0,0,.2);
+}
+#materialsSubView .material-item::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 5px;
+  background: linear-gradient(180deg,#fff05a,#ffb72b);
+}
+#materialsSubView .material-item::after {
+  content: "▤"; display: grid; place-items: center; flex: 0 0 60px; width: 60px; height: 60px;
+  order: -1; border-radius: 17px; border: 1px solid rgba(255,217,40,.14);
+  background: linear-gradient(145deg,#222725,#101212); color: var(--ub-gold);
+  font-size: 2rem; box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+}
+#materialsSubView .material-info { flex: 1; min-width: 0; }
+#materialsSubView .material-info .course { color: var(--ub-gold); font-size: .83rem; margin-bottom: 7px; }
+#materialsSubView .material-info h3 { font-size: 1.03rem; line-height: 1.35; white-space: normal; overflow-wrap: anywhere; margin-bottom: 8px; }
+#materialsSubView .material-info .meta { color: #9ba2ad; font-size: .74rem; }
+#materialsSubView .download-btn {
+  align-self: center; border-radius: 50px; padding: 12px 15px;
+  color: var(--ub-gold); background: rgba(255,217,40,.06);
+  border: 1.5px solid var(--ub-gold); box-shadow: 0 0 16px rgba(255,217,40,.08);
+  font-size: .82rem; font-weight: 800;
+}
+#materialsSubView .download-btn:active { background: var(--ub-gold); color: #111; }
+#materialsSubView .empty { padding: 34px 20px; border: 1px dashed rgba(255,217,40,.22); border-radius: 20px; color: #9298a1; }
+#timetableSubView .filter-wrap { padding-left: 20px; padding-right: 20px; }
+#timetableSubView .filter-btn { border-radius: 50px; padding: 9px 15px; }
+#timetableSubView .timetable-item {
+  background: linear-gradient(125deg,#171a1b,#101212); border-color: rgba(255,255,255,.1);
+  border-radius: 18px; box-shadow: 0 8px 22px rgba(0,0,0,.16);
+}
+@media (min-width: 700px) {
+  #academicsView { max-width: 760px; margin: 0 auto; border-left: 1px solid rgba(255,255,255,.04); border-right: 1px solid rgba(255,255,255,.04); }
+  #materialsSubView .materials-list { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  #materialsSubView .material-item { margin-bottom: 0; }
+}
+@media (max-width: 380px) {
+  #academicsView > .header { padding: 18px 16px; }
+  #academicsView > .header .logo-text { font-size: 1.45rem; }
+  #academicsView > .inner-toggle { margin-left: 14px; margin-right: 14px; }
+  #materialsSubView .hero { padding-left: 20px; padding-right: 20px; }
+  #materialsSubView .material-item { padding: 16px 12px 16px 16px; gap: 9px; }
+  #materialsSubView .material-item::after { flex-basis: 44px; width: 44px; height: 44px; font-size: 1.5rem; }
+  #materialsSubView .download-btn { padding: 10px 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #academicsView *, #academicsView *::before, #academicsView *::after { transition: none !important; animation: none !important; }
+}
+</style>
+
+
+<style id="unibuzz-compact-final-fix">
+/* Final compact pass: placed last so it overrides earlier redesign rules */
+#academicsView .header { padding: 12px 16px !important; min-height: 0 !important; }
+#academicsView .inner-toggle { margin: 12px 16px 0 !important; padding: 4px !important; gap: 5px !important; border-radius: 16px !important; }
+#academicsView .toggle-btn { min-height: 44px !important; padding: 8px 7px !important; font-size: .78rem !important; border-radius: 12px !important; }
+#materialsSubView .hero, #timetableSubView .hero { padding: 22px 18px 8px !important; }
+#materialsSubView .hero h1, #timetableSubView .hero h1 { font-size: 1.55rem !important; line-height: 1.18 !important; margin-bottom: 5px !important; letter-spacing: -.35px !important; }
+#materialsSubView .hero p, #timetableSubView .hero p { font-size: .8rem !important; line-height: 1.4 !important; }
+#materialsSubView .upload-btn { min-height: 64px !important; margin: 12px 18px 16px !important; padding: 12px 14px !important; width: calc(100% - 36px) !important; border-radius: 15px !important; font-size: .88rem !important; line-height: 1.25 !important; box-shadow: 0 5px 14px rgba(255,191,27,.08) !important; }
+#materialsSubView .upload-btn::before { flex-basis: 34px !important; width: 34px !important; height: 34px !important; padding-right: 9px !important; font-size: 1.45rem !important; }
+#materialsSubView .upload-btn::after { width: 30px !important; height: 30px !important; flex-basis: 30px !important; font-size: 1rem !important; }
+#materialsSubView .search-wrap { padding: 0 18px 7px !important; }
+#materialsSubView .search-wrap input { min-height: 46px !important; padding: 10px 13px !important; border-radius: 13px !important; font-size: .8rem !important; }
+#materialsSubView .materials-list, #timetableSubView .timetable-list { padding: 7px 18px !important; }
+#materialsSubView .material-item { min-height: 78px !important; padding: 12px 12px 12px 15px !important; margin-bottom: 9px !important; gap: 9px !important; border-radius: 16px !important; box-shadow: 0 4px 12px rgba(0,0,0,.12) !important; }
+#materialsSubView .material-item::before { width: 3px !important; }
+#materialsSubView .material-item::after { flex-basis: 38px !important; width: 38px !important; height: 38px !important; border-radius: 11px !important; font-size: 1.25rem !important; }
+#materialsSubView .material-info .course { font-size: .72rem !important; margin-bottom: 2px !important; }
+#materialsSubView .material-info h3 { font-size: .84rem !important; line-height: 1.25 !important; margin-bottom: 3px !important; }
+#materialsSubView .material-info .meta { font-size: .64rem !important; }
+#materialsSubView .download-btn { padding: 7px 9px !important; font-size: .68rem !important; border-radius: 24px !important; box-shadow: none !important; }
+#timetableSubView .filter-wrap { padding-left: 18px !important; padding-right: 18px !important; }
+#timetableSubView .filter-btn { padding: 6px 10px !important; font-size: .72rem !important; }
+#timetableSubView .timetable-item { padding: 11px !important; border-radius: 13px !important; }
+@media (max-width: 380px) {
+ #academicsView .inner-toggle { margin-left: 12px !important; margin-right: 12px !important; }
+ #materialsSubView .hero { padding-left: 16px !important; padding-right: 16px !important; }
+ #materialsSubView .material-item { padding: 11px 9px 11px 12px !important; gap: 7px !important; }
+ #materialsSubView .material-item::after { flex-basis: 32px !important; width: 32px !important; height: 32px !important; font-size: 1.05rem !important; }
+ #materialsSubView .download-btn { padding: 7px 8px !important; font-size: .65rem !important; }
+}
+</style>
+
+
+<style id="unibuzz-campus-spots-compact">
+/* Campus Spots refresh: compact, calmer, and consistent with the UniBuzz gold/black theme */
+#spotsView { max-width: 760px; margin: 0 auto; overflow: hidden; border-left: 1px solid rgba(255,255,255,.035); border-right: 1px solid rgba(255,255,255,.035); }
+#spotsView > .header { padding: 12px 16px; min-height: 58px; background: rgba(12,13,13,.94); backdrop-filter: blur(14px); }
+#spotsView > .header .logo-text { font-size: 1.22rem; }
+#spotsView .back-btn { font-size: 1.3rem; }
+#spotsView .spots-hero { padding: 25px 18px 16px; background: radial-gradient(ellipse at 12% 0%, rgba(255,215,0,.10), transparent 58%), linear-gradient(180deg, rgba(255,215,0,.035), transparent); }
+#spotsView .spots-hero .script { font-size: 1rem; margin-bottom: 5px; }
+#spotsView .spots-hero h1 { font-size: clamp(1.8rem, 7vw, 2.25rem); line-height: 1.06; margin-bottom: 8px; letter-spacing: -.6px; }
+#spotsView .spots-hero .subtitle { max-width: 100%; font-size: .82rem; line-height: 1.5; color: #aeb3bc; margin-bottom: 15px; }
+#spotsView .features-row { gap: 8px; padding-bottom: 2px; }
+#spotsView .feature-badge { min-width: 76px; padding: 8px 7px; gap: 5px; border-radius: 12px; background: rgba(255,255,255,.025); border-color: rgba(255,255,255,.07); }
+#spotsView .feature-badge .fb-icon { width: 28px; height: 28px; font-size: 1rem; border-radius: 9px; }
+#spotsView .feature-badge .fb-label { font-size: .61rem; }
+#spotsView .cat-cards-row { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; padding: 14px 18px 16px; }
+#spotsView .cat-card { min-height: 82px; padding: 10px 11px; gap: 7px; border-radius: 14px; background: linear-gradient(145deg, #151717, #101111); border-color: rgba(255,255,255,.08); transition: border-color .2s, background .2s, transform .2s; }
+#spotsView .cat-card:active { transform: scale(.97); }
+#spotsView .cat-card.selected { border-color: rgba(255,217,40,.75); background: linear-gradient(145deg, rgba(255,217,40,.12), rgba(255,181,46,.035)); box-shadow: 0 4px 14px rgba(255,217,40,.05); }
+#spotsView .cat-card .cat-icon-box { width: 31px; height: 31px; border-radius: 9px; font-size: 1rem; }
+#spotsView .cat-card .cat-label { font-size: .7rem; line-height: 1.15; gap: 3px; }
+#spotsView .cat-card .cat-label .arrow { font-size: .75rem; }
+#spotsView .spots-section-title { padding: 8px 18px 4px; gap: 8px; }
+#spotsView .spots-section-title .pin-icon { font-size: 1.1rem; }
+#spotsView .spots-section-title h2 { font-size: 1.12rem; letter-spacing: -.25px; }
+#spotsView .spots-subtitle { padding: 0 18px 12px; font-size: .76rem; color: #858b94; }
+#spotsView .spots-container { padding: 0 18px 22px; }
+#spotsView .spot-card { gap: 11px; padding: 11px; margin-bottom: 10px; border-radius: 16px; background: linear-gradient(145deg, #141616, #0f1010); border-color: rgba(255,255,255,.085); box-shadow: 0 5px 16px rgba(0,0,0,.12); }
+#spotsView .spot-image { width: 78px; height: 92px; border-radius: 12px; font-size: 2rem; }
+#spotsView .spot-header-line { gap: 8px; margin-bottom: 6px; }
+#spotsView .spot-cat-icon { width: 26px; height: 26px; border-radius: 8px; font-size: .8rem; }
+#spotsView .spot-name-cat h3 { font-size: .88rem; line-height: 1.25; margin-bottom: 3px; }
+#spotsView .spot-name-cat .cat-text { font-size: .67rem; }
+#spotsView .spot-desc { font-size: .72rem; line-height: 1.4; margin-bottom: 7px; }
+#spotsView .spot-info-row { align-items: flex-start; gap: 5px; font-size: .69rem; line-height: 1.35; margin-bottom: 4px; overflow-wrap: anywhere; }
+#spotsView .spot-price-pill { font-size: .68rem; padding: 5px 9px; margin-top: 6px; }
+#spotsView .cta-banner { margin: 4px 18px 24px; padding: 14px; gap: 10px; border-radius: 16px; }
+#spotsView .cta-banner .cta-icon { font-size: 1.4rem; }
+#spotsView .cta-banner .cta-text h4 { font-size: .82rem; }
+#spotsView .cta-banner .cta-text p { font-size: .72rem; }
+#spotsView .cta-banner button { padding: 9px 12px; font-size: .72rem; white-space: nowrap; }
+@media (min-width: 600px) {
+  #spotsView .spots-container { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; align-items: stretch; }
+  #spotsView .spot-card { margin-bottom: 0; }
+}
+@media (max-width: 380px) {
+  #spotsView .spots-hero { padding: 20px 15px 13px; }
+  #spotsView .cat-cards-row { padding-left: 14px; padding-right: 14px; gap: 6px; }
+  #spotsView .cat-card { padding: 9px 8px; }
+  #spotsView .cat-card .cat-label { font-size: .65rem; }
+  #spotsView .spots-container { padding-left: 14px; padding-right: 14px; }
+  #spotsView .spot-card { gap: 9px; padding: 9px; }
+  #spotsView .spot-image { width: 68px; height: 84px; }
+  #spotsView .spot-name-cat h3 { font-size: .82rem; }
+  #spotsView .cta-banner { margin-left: 14px; margin-right: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { #spotsView *, #spotsView *::before, #spotsView *::after { transition: none !important; } }
+</style>
+
 </head>
 <body>
 
@@ -482,6 +759,14 @@
   </div>
 </div>
 
+<div class="bottom-nav" id="bottomNav">
+  <button class="bn-item" data-nav="home" onclick="bnGo('home')"><span class="bn-ico">🏠</span>Home</button>
+  <button class="bn-item" data-nav="explore" onclick="bnGo('explore')"><span class="bn-ico">🔍</span>Explore</button>
+  <button class="bn-item compose" onclick="openComposeModal()"><span class="bn-ico">＋</span></button>
+  <button class="bn-item" data-nav="notifs" onclick="bnGo('notifs')"><span class="bn-ico">🔔</span>Notifs</button>
+  <button class="bn-item" data-nav="profile" onclick="bnGo('profile')"><span class="bn-ico">👤</span>Profile</button>
+</div>
+
 <div class="loading-screen" id="loadingScreen">
   <div class="spinner"></div>
   <p>Loading UniBuzz...</p>
@@ -500,7 +785,10 @@
       <h1>Welcome back, <span id="userName">Student</span> 👋</h1>
       <p id="userMatric">Matric: --</p>
     </div>
-    <div class="avatar-btn" id="avatarBtn" onclick="showProfile()">S</div>
+   <div class="avatar-wrapper">
+      <div class="avatar-btn" id="avatarBtn" onclick="pickAvatar()"><span id="avatarLetter">S</span><img id="avatarImg" src="" style="display:none;"></div>
+      <div class="avatar-cam-badge">📷</div>
+    </div>
   </div>
   <div class="ann-strip" id="annStrip" style="display:none;"></div>
   <div class="section-title">📌 Explore UniBuzz</div>
@@ -576,20 +864,12 @@
 </div>
 
 <div id="communityView" class="view">
-  <div class="header"><button class="back-btn" onclick="showDashboard()">←</button><div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div><div style="width: 30px;"></div></div>
-  <div class="community-hero"><div class="script">Talk. Banter. Vibes.</div><h1>Campus <span class="purple">Community</span></h1><p>What's happening on campus. Say anything — memes, gist, lost items, study groups.</p></div>
+  <div class="header community-topbar"><button class="back-btn" onclick="showDashboard()">←</button><div class="community-title">Campus <span>Community</span></div><button class="community-notifications" type="button" aria-label="Notifications" onclick="showToast('Notifications coming soon')">🔔</button></div>
+  <div class="feed-tabs" role="tablist" aria-label="Community feed"><button class="feed-tab active" id="forYouTab" role="tab" aria-selected="true" onclick="switchMainFeed('for-you')">For you</button><button class="feed-tab" id="followingTab" role="tab" aria-selected="false" onclick="switchMainFeed('following')">Following</button></div>
   <div class="compose-bar" onclick="openComposeModal()">
     <div class="compose-avatar" id="composeAvatar">S</div>
-    <button class="compose-input placeholder" id="composePlaceholder" type="button">What's happening on campus?</button>
+    <button class="compose-input placeholder" id="composePlaceholder" type="button">What's buzzing on campus?</button>
     <button class="compose-btn" onclick="event.stopPropagation();openComposeModal()">Post</button>
-  </div>
-  <div class="trending-bar" id="trendingBar">
-    <button class="trend-pill active" data-tag="all" onclick="filterFeed('all')">All</button>
-    <button class="trend-pill" data-tag="lostandfound" onclick="filterFeed('lostandfound')"><span class="hash">#</span>lostandfound</button>
-    <button class="trend-pill" data-tag="studygroup" onclick="filterFeed('studygroup')"><span class="hash">#</span>studygroup</button>
-    <button class="trend-pill" data-tag="question" onclick="filterFeed('question')"><span class="hash">#</span>question</button>
-    <button class="trend-pill" data-tag="banter" onclick="filterFeed('banter')"><span class="hash">#</span>banter</button>
-    <button class="trend-pill" data-tag="meme" onclick="filterFeed('meme')"><span class="hash">#</span>meme</button>
   </div>
   <div class="tweet-feed" id="postsList"><div class="empty">Loading feed...</div></div>
 </div>
@@ -608,7 +888,7 @@
 <div id="profileView" class="view">
   <div class="header"><button class="back-btn" onclick="showDashboard()">←</button><div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div><div style="width: 30px;"></div></div>
   <div class="profile-header-card">
-    <div class="profile-avatar-lg" id="profileAvatar">S</div>
+    <div class="profile-avatar-lg" id="profileAvatar" onclick="pickAvatar()" style="cursor:pointer;"><span id="profileAvatarLetter">S</span></div>
     <h2 id="profileName">Student</h2>
     <div class="p-email" id="profileEmail">--</div>
     <div class="p-badges" id="profileBadges"></div>
@@ -689,12 +969,14 @@
   </div>
 </div>
 
+<!-- ===== NOTIFICATIONS ===== -->
 <div id="notificationsView" class="view">
   <div class="header"><button class="back-btn" onclick="showDashboard()">←</button><div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div><div style="width: 30px;"></div></div>
   <div class="hero"><h1>🔔 <span>Notifications</span></h1><p>Replies, likes & mentions</p></div>
   <div id="notifList" style="padding: 10px 20px;"></div>
 </div>
 
+<!-- ===== MY ACTIVITY ===== -->
 <div id="activityView" class="view">
   <div class="header"><button class="back-btn" onclick="showDashboard()">←</button><div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div><div style="width: 30px;"></div></div>
   <div class="hero"><h1>⭐ <span>My Activity</span></h1><p>Your posts and replies</p></div>
@@ -705,6 +987,7 @@
   <div id="activityList" style="padding: 10px 20px;"></div>
 </div>
 
+<!-- ===== SEARCH ===== -->
 <div id="searchView" class="view">
   <div class="header"><button class="back-btn" onclick="showDashboard()">←</button><div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div><div style="width: 30px;"></div></div>
   <div class="hero"><h1>🔍 <span>Search</span></h1><p>Find posts, hashtags & people</p></div>
@@ -712,12 +995,14 @@
   <div id="searchResults" style="padding: 10px 20px;"></div>
 </div>
 
+<!-- ===== TRENDING ===== -->
 <div id="trendingView" class="view">
   <div class="header"><button class="back-btn" onclick="showDashboard()">←</button><div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div><div style="width: 30px;"></div></div>
   <div class="hero"><h1>📊 <span>Trending</span></h1><p>What's hot on campus right now</p></div>
   <div id="trendingList" style="padding: 10px 20px;"></div>
 </div>
 
+<!-- ===== SETTINGS ===== -->
 <div id="settingsView" class="view">
   <div class="header"><button class="back-btn" onclick="showDashboard()">←</button><div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div><div style="width: 30px;"></div></div>
   <div class="hero"><h1>⚙️ <span>Settings</span></h1><p>Preferences & account</p></div>
@@ -752,6 +1037,7 @@
   </div>
 </div>
 
+<!-- ===== HELP & SUPPORT ===== -->
 <div id="helpView" class="view">
   <div class="header"><button class="back-btn" onclick="showDashboard()">←</button><div class="logo-text"><span class="uni">Uni</span><span class="buzz">Buzz</span></div><div style="width: 30px;"></div></div>
   <div class="hero"><h1>❓ <span>Help & Support</span></h1><p>We're here for you</p></div>
@@ -801,7 +1087,6 @@
     <button class="toggle-btn" id="toggleAdminVendors" onclick="switchAdminSection('vendors')">🏪 Vendors</button>
     <button class="toggle-btn" id="toggleAdminAnn" onclick="switchAdminSection('announcements')">📢 Announce</button>
     <button class="toggle-btn" id="toggleAdminTT" onclick="switchAdminSection('timetable')">📅 Timetable</button>
-    <button class="toggle-btn" id="toggleAdminReports" onclick="switchAdminSection('reports')">🚩 Reports</button>
   </div>
   <div id="adminMaterialsSection">
     <div class="inner-toggle">
@@ -829,34 +1114,6 @@
     <button class="upload-btn" onclick="openNewTTModal()">+ Add Class</button>
     <div class="materials-list" id="adminTTList"></div>
   </div>
-  <div id="adminReportsSection" style="display:none;">
-    <div class="inner-toggle">
-      <button class="toggle-btn active" id="toggleReportPending" onclick="switchAdminReports('pending')">⏳ Pending</button>
-      <button class="toggle-btn" id="toggleReportResolved" onclick="switchAdminReports('resolved')">✅ Resolved</button>
-    </div>
-    <div class="materials-list" id="adminReportsList"></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="reportModal">
-  <div class="modal" style="border-color: rgba(244, 63, 94, 0.3);">
-    <h2 style="color: #F43F5E;">🚩 Report Post</h2>
-    <div style="font-size:0.82rem;color:#aaa;margin-bottom:16px;line-height:1.5;">Help keep UniBuzz safe. Why are you reporting this post?</div>
-    <div class="report-reasons" id="reportReasons">
-      <button class="report-reason-btn" data-reason="Spam" onclick="selectReportReason('Spam')"><span class="rr-emoji">📢</span> Spam or misleading</button>
-      <button class="report-reason-btn" data-reason="Harassment" onclick="selectReportReason('Harassment')"><span class="rr-emoji">😠</span> Harassment or bullying</button>
-      <button class="report-reason-btn" data-reason="NSFW" onclick="selectReportReason('NSFW')"><span class="rr-emoji">🔞</span> Inappropriate content</button>
-      <button class="report-reason-btn" data-reason="Scam" onclick="selectReportReason('Scam')"><span class="rr-emoji">💰</span> Scam or fraud</button>
-      <button class="report-reason-btn" data-reason="Other" onclick="selectReportReason('Other')"><span class="rr-emoji">💬</span> Something else</button>
-    </div>
-    <label style="color: #F43F5E;">Additional details (optional)</label>
-    <textarea id="reportNote" placeholder="Add more context..." style="min-height: 70px;"></textarea>
-    <div id="reportStatus" style="text-align:center;padding:10px;font-size:0.85rem;margin-bottom:10px;border-radius:10px;display:none;"></div>
-    <div class="modal-btns">
-      <button class="modal-btn cancel" onclick="closeReportModal()">Cancel</button>
-      <button class="modal-btn submit" id="reportSubmitBtn" style="background: #F43F5E;" onclick="submitReport()" disabled>Submit Report</button>
-    </div>
-  </div>
 </div>
 
 <div class="modal-overlay" id="composeModal">
@@ -870,6 +1127,12 @@
       <div class="cm-avatar" id="composeModalAvatar">S</div>
       <textarea class="cm-textarea" id="composeText" placeholder="What's happening on campus? Use #lostandfound, #studygroup, #question..." maxlength="280" oninput="updateComposeCount()"></textarea>
     </div>
+    <div class="cm-media-tools">
+      <label class="cm-media-btn" for="composeImage">▧ Add photo</label>
+      <input id="composeImage" type="file" accept="image/*" hidden onchange="previewComposeImage(event)">
+      <span id="composeImageHint" style="font-size:.74rem;color:#777;">Images up to 5 MB</span>
+    </div>
+    <div class="cm-image-preview" id="composeImagePreview"><img id="composeImagePreviewImg" alt="Selected image preview"><button type="button" class="cm-image-remove" onclick="removeComposeImage()" aria-label="Remove image">×</button></div>
     <div class="cm-footer">
       <div class="cm-hint">💡 Add #hashtags to help others find your post</div>
       <div class="cm-count" id="composeCount">0/280</div>
@@ -977,6 +1240,7 @@
     </div>
   </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   window.addEventListener('error', e => {
@@ -1086,13 +1350,11 @@
   let currentTTSemester = '1';
   let currentAdminTTFilter = '1';
   let currentFeedFilter = 'all';
+  let currentMainFeed = 'for-you';
+  let followingUserIds = [];
   let authHandled = false;
   let currentActivityTab = 'posts';
   let searchTimeout = null;
-  let activeTweetMenu = null;
-  let reportPostId = null;
-  let reportReason = null;
-  let currentAdminReportTab = 'pending';
 
   const catEmoji = { 'Food': '🍲', 'Laundry': '🧺', 'Printing': '🖨️', 'Gadgets': '💻', 'Accommodation': '🏠', 'Transport': '🚌' };
 
@@ -1199,18 +1461,26 @@
     }, 1200);
   }
 
-  function refreshDashboardUI() {
+function refreshDashboardUI() {
     const name = currentProfile.full_name || 'Student';
+    const email = currentProfile.email || currentUser.email;
     const initial = name.charAt(0).toUpperCase();
+
     document.getElementById('userName').textContent = name;
-    document.getElementById('avatarBtn').textContent = initial;
-    document.getElementById('profileAvatar').textContent = initial;
-    document.getElementById('composeAvatar').textContent = initial;
-    document.getElementById('composeModalAvatar').textContent = initial;
-    document.getElementById('replyBoxAvatar').textContent = initial;
     document.getElementById('profileName').textContent = name;
-    document.getElementById('profileEmail').textContent = currentProfile.email || currentUser.email;
+    document.getElementById('profileEmail').textContent = email;
     document.getElementById('userMatric').textContent = 'Matric: ' + (currentProfile.matric_no || '--');
+    
+    // Update the side drawer (this is what was missing!)
+    const drawerAvatar = document.getElementById('drawerAvatar');
+    const drawerName = document.getElementById('drawerName');
+    const drawerEmail = document.getElementById('drawerEmail');
+    if (drawerName) drawerName.textContent = name;
+    if (drawerEmail) drawerEmail.textContent = email;
+    if (drawerAvatar) drawerAvatar.textContent = initial; 
+
+    // Let applyAvatar handle ALL avatars (it will override the initial if they have a picture)
+    applyAvatar(currentProfile.avatar_url || null);
 
     if (currentProfile.is_admin) { isAdmin = true; document.getElementById('adminCard').style.display = 'block'; }
     if (currentProfile.role === 'vendor' || currentProfile.role === 'both') { document.getElementById('vendorCard').style.display = 'block'; }
@@ -1220,21 +1490,15 @@
     if (currentProfile.role === 'vendor' || currentProfile.role === 'both') badges.push('<span class="badge vendor">🏪 Vendor</span>');
     document.getElementById('profileBadges').innerHTML = badges.join('');
 
-    const drawerAvatar = document.getElementById('drawerAvatar');
-    const drawerName = document.getElementById('drawerName');
-    const drawerEmail = document.getElementById('drawerEmail');
-    if (drawerAvatar) drawerAvatar.textContent = initial;
-    if (drawerName) drawerName.textContent = name;
-    if (drawerEmail) drawerEmail.textContent = currentProfile.email || currentUser.email;
     if (currentProfile.is_admin) {
-      const b = document.getElementById('drawerAdminBtn');
-      if (b) b.style.display = 'flex';
+        const b = document.getElementById('drawerAdminBtn');
+        if (b) b.style.display = 'flex';
     }
     if (currentProfile.role === 'vendor' || currentProfile.role === 'both') {
-      const b = document.getElementById('drawerVendorBtn');
-      if (b) b.style.display = 'flex';
+        const b = document.getElementById('drawerVendorBtn');
+        if (b) b.style.display = 'flex';
     }
-  }
+}
 
   async function logout() { await supabaseClient.auth.signOut(); window.location.href = 'index.html'; }
 
@@ -1244,22 +1508,40 @@
     const el = document.getElementById(id);
     el.classList.add('active');
     el.style.display = 'block';
+    const nav = document.getElementById('bottomNav');
+    if (nav) {
+      const show = (id === 'communityView');
+      nav.classList.toggle('show', show);
+      document.body.classList.toggle('has-bottom-nav', show);
+    }
     window.scrollTo(0, 0);
   }
 
-  function showDashboard() { showView('dashboardView'); loadAnnouncementStrip(); }
+  function bnGo(dest) {
+    document.querySelectorAll('.bn-item').forEach(function(b) { b.classList.remove('active'); });
+    const btn = document.querySelector('.bn-item[data-nav="' + dest + '"]');
+    if (btn) btn.classList.add('active');
+    if (dest === 'home') showDashboard();
+    else if (dest === 'explore') showSearch();
+    else if (dest === 'notifs') showNotifications();
+    else if (dest === 'profile') showProfile();
+  }
+
+function showDashboard() { showView('dashboardView'); loadAnnouncementStrip(); }
   function showAcademics() { showView('academicsView'); loadMaterials(); }
   function showSpots() { showView('spotsView'); loadSpots(); }
   function showAdmin() { showView('adminView'); switchAdminSection('materials'); }
   function showCommunity() { showView('communityView'); loadPosts(); }
   function showAnnouncements() { showView('announcementsView'); loadAnnouncements(); }
 
+  // ===== NOTIFICATIONS =====
   function showNotifications() {
     showView('notificationsView');
     const list = document.getElementById('notifList');
     list.innerHTML = `<div class="empty" style="padding:40px 20px;"><div class="icon">🔔</div><p>No notifications yet.<br>We'll let you know when someone replies or likes your post.</p></div>`;
   }
 
+  // ===== MY ACTIVITY =====
   function showActivity() {
     showView('activityView');
     switchActivity('posts');
@@ -1306,6 +1588,7 @@
     }
   }
 
+  // ===== SEARCH =====
   function showSearch() {
     showView('searchView');
     document.getElementById('globalSearchInput').value = '';
@@ -1350,6 +1633,7 @@
     }).join('');
   }
 
+  // ===== TRENDING =====
   async function showTrending() {
     showView('trendingView');
     const list = document.getElementById('trendingList');
@@ -1386,6 +1670,7 @@
     `).join('');
   }
 
+  // ===== SETTINGS =====
   function showSettings() {
     showView('settingsView');
     try {
@@ -1411,7 +1696,10 @@
     }
   }
 
-  function showHelp() { showView('helpView'); }
+  // ===== HELP =====
+  function showHelp() {
+    showView('helpView');
+  }
 
   async function loadAnnouncementStrip() {
     const strip = document.getElementById('annStrip');
@@ -1538,6 +1826,63 @@
       <div class="fresher-detail-wrap">${section.tips.map(tip => `<div class="fresher-tip"><h3>${escapeHtml(tip.title)}</h3><p>${escapeHtml(tip.body)}</p></div>`).join('')}</div>
     `;
   }
+  function pickAvatar() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 3 * 1024 * 1024) { alert('Image too large. Max 3MB.'); return; }
+      await uploadAvatar(file);
+    };
+    input.click();
+  }
+
+  async function uploadAvatar(file) {
+    try {
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = 'avatar_' + currentUser.id + '_' + Date.now() + '.' + ext;
+      const { error: upErr } = await supabaseClient.storage.from('avatars').upload(path, file, { cacheControl: '3600', upsert: false, contentType: file.type });
+      if (upErr) throw upErr;
+      const { data: urlData } = supabaseClient.storage.from('avatars').getPublicUrl(path);
+      const avatarUrl = urlData.publicUrl;
+      const { error: dbErr } = await supabaseClient.from('profiles').update({ avatar_url: avatarUrl }).eq('id', currentUser.id);
+      if (dbErr) throw dbErr;
+      currentProfile.avatar_url = avatarUrl;
+      applyAvatar(avatarUrl);
+      alert('✅ Profile photo updated!');
+    } catch (err) {
+      alert('Upload failed: ' + (err.message || 'Unknown error'));
+    }
+  }
+
+  function applyAvatar(url) {
+    const name = currentProfile.full_name || 'Student';
+    const initial = name.charAt(0).toUpperCase();
+    
+    const avatarLetter = document.getElementById('avatarLetter');
+    const avatarImg = document.getElementById('avatarImg');
+    const profileAvatar = document.getElementById('profileAvatar');
+    const drawerAvatar = document.getElementById('drawerAvatar');
+    const replyBoxAvatar = document.getElementById('replyBoxAvatar'); // <-- ADD THIS
+
+    if (url) {
+        // Show the picture
+        if (avatarLetter) avatarLetter.style.display = 'none';
+        if (avatarImg) { avatarImg.src = url; avatarImg.style.display = 'block'; }
+        if (profileAvatar) profileAvatar.innerHTML = '<img src="' + url + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+        if (drawerAvatar) drawerAvatar.innerHTML = '<img src="' + url + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+        if (replyBoxAvatar) replyBoxAvatar.innerHTML = '<img src="' + url + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">'; // <-- ADD THIS
+    } else {
+        // Show the letter
+        if (avatarLetter) { avatarLetter.textContent = initial; avatarLetter.style.display = 'flex'; }
+        if (avatarImg) avatarImg.style.display = 'none';
+        if (profileAvatar) profileAvatar.innerHTML = '<span id="profileAvatarLetter">' + initial + '</span>';
+        if (drawerAvatar) drawerAvatar.textContent = initial;
+        if (replyBoxAvatar) replyBoxAvatar.textContent = initial; // <-- ADD THIS
+    }
+}
 
   function showProfile() {
     showView('profileView');
@@ -1749,17 +2094,14 @@
     document.getElementById('adminVendorsSection').style.display = section === 'vendors' ? 'block' : 'none';
     document.getElementById('adminAnnSection').style.display = section === 'announcements' ? 'block' : 'none';
     document.getElementById('adminTTSection').style.display = section === 'timetable' ? 'block' : 'none';
-    document.getElementById('adminReportsSection').style.display = section === 'reports' ? 'block' : 'none';
     document.getElementById('toggleAdminMaterials').classList.toggle('active', section === 'materials');
     document.getElementById('toggleAdminVendors').classList.toggle('active', section === 'vendors');
     document.getElementById('toggleAdminAnn').classList.toggle('active', section === 'announcements');
     document.getElementById('toggleAdminTT').classList.toggle('active', section === 'timetable');
-    document.getElementById('toggleAdminReports').classList.toggle('active', section === 'reports');
     if (section === 'materials') loadAdminMaterials();
     if (section === 'vendors') loadAdminVendors();
     if (section === 'announcements') loadAdminAnnouncements();
     if (section === 'timetable') loadAdminTimetable();
-    if (section === 'reports') loadAdminReports();
   }
   function switchAdminVendors(tab) {
     currentAdminVendorTab = tab;
@@ -1834,6 +2176,19 @@
       allPosts = []; return;
     }
     allPosts = data;
+    followingUserIds = [];
+    if (currentUser) {
+      const { data: follows, error: followsError } = await supabaseClient.from('follows').select('following_id').eq('follower_id', currentUser.id);
+      if (!followsError && follows) followingUserIds = follows.map(row => row.following_id);
+    }
+    // Profile metadata powers genuine admin/verified badges and avatar photos.
+    const authorIds = [...new Set(data.map(post => post.user_id).filter(Boolean))];
+    window.uniBuzzAuthorProfiles = {};
+    if (authorIds.length) {
+     const { data: profiles } = await supabaseClient.from('profiles').select('id,full_name,avatar_url,is_admin,is_verified').in('id', authorIds);
+window.uniBuzzAuthorProfiles = {};
+(profiles || []).forEach(profile => { window.uniBuzzAuthorProfiles[profile.id] = profile; });
+    }
     renderTweets(currentFeedFilter);
   }
 
@@ -1844,15 +2199,20 @@
   async function renderTweets(filter) {
     const list = document.getElementById('postsList');
     let filtered = allPosts;
-    if (filter !== 'all') {
+    if (currentMainFeed === 'following') {
+      filtered = allPosts.filter(p => followingUserIds.includes(p.user_id) || (currentUser && p.user_id === currentUser.id));
+    }
+    if (filter !== 'all' && filter !== 'following') {
       const tag = filter.toLowerCase();
-      filtered = allPosts.filter(p => {
+      filtered = filtered.filter(p => {
         const text = (getTweetText(p) + ' ' + (p.category || '')).toLowerCase();
         return text.includes('#' + tag) || text.includes(tag);
       });
     }
     if (filtered.length === 0) {
-      list.innerHTML = `<div class="empty"><div class="icon">📝</div><p>No posts with #${filter} yet.<br>Be the first!</p></div>`;
+      list.innerHTML = currentMainFeed === 'following'
+        ? `<div class="empty"><div class="icon">👀</div><p>Your Following feed is quiet for now.<br>Posts from people you follow will show here.</p></div>`
+        : `<div class="empty"><div class="icon">📝</div><p>No posts with #${filter} yet.<br>Be the first!</p></div>`;
       return;
     }
 
@@ -1867,6 +2227,13 @@
       const name = p.author_name || 'Student';
       const handle = makeHandle(name);
       const initial = name.charAt(0).toUpperCase();
+      const authorProfile = (window.uniBuzzAuthorProfiles || {})[p.user_id] || {};
+      const isPostAdmin = !!authorProfile.is_admin;
+      const isPostVerified = !!authorProfile.is_verified || isPostAdmin;
+      const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=FFD700&color=000&bold=true`;
+const avatarMarkup = authorProfile.avatar_url 
+    ? `<img src="${escapeHtml(authorProfile.avatar_url)}" alt="" onerror="this.onerror=null;this.src='${fallbackAvatar}';">` 
+    : `<img src="${fallbackAvatar}" alt="">`;
       const text = getTweetText(p);
       const time = timeAgo(p.created_at);
       const replyCount = replyCounts[p.id] || 0;
@@ -1874,21 +2241,28 @@
       const reposted = hasReaction(p.id, 'repost');
       const likeCount = liked ? 1 : 0;
       const repostCount = reposted ? 1 : 0;
-      const isOwner = p.user_id === currentUser.id;
       return `<div class="tweet" onclick="openPost(${p.id})">
         <div class="tweet-top">
-          <div class="tweet-avatar">${initial}</div>
+          <div class="tweet-avatar">${avatarMarkup}</div>
           <div class="tweet-main">
-            <div class="tweet-row">
-              <div class="tweet-header" style="flex:1;">
-                <span class="tweet-name">${escapeHtml(name)}</span>
-                <span class="tweet-handle">${handle}</span>
-                <span class="tweet-dot">·</span>
-                <span class="tweet-time">${time}</span>
+            <div class="tweet-header">
+              <span class="tweet-name">${escapeHtml(name)}</span>
+              ${isPostVerified ? '<span class="verified-tick" title="Verified UniBuzz account" aria-label="Verified">✓</span>' : ''}
+              ${isPostAdmin ? '<span class="admin-label">👑 ADMIN</span>' : ''}
+              <span class="tweet-handle">${handle}</span>
+              <span class="tweet-dot">·</span>
+              <span class="tweet-time">${time}</span>
+              ${(currentUser && p.user_id && p.user_id !== currentUser.id) ? `<button type="button" class="follow-user-btn" style="border:1px solid #444;border-radius:18px;padding:4px 10px;background:${followingUserIds.includes(p.user_id) ? '#222' : '#FFD700'};color:${followingUserIds.includes(p.user_id) ? '#eee' : '#111'};font:700 .7rem 'Poppins',sans-serif;cursor:pointer;margin-left:4px;" onclick="event.stopPropagation();toggleFollowUser('${String(p.user_id).replace(/'/g, '')}')">${followingUserIds.includes(p.user_id) ? 'Following' : 'Follow'}</button>` : ''}
+              <div class="tweet-menu-wrap" onclick="event.stopPropagation()">
+                <button class="tweet-menu-trigger" type="button" aria-label="Post options" aria-haspopup="true" aria-expanded="false" onclick="toggleTweetMenu(event, ${p.id})">⋯</button>
+                <div class="tweet-menu" id="tweetMenu-${p.id}" role="menu">
+                  ${(currentUser && p.user_id === currentUser.id) ? `<button type="button" class="delete-post" role="menuitem" onclick="event.stopPropagation();deleteTweet(${p.id})">🗑 Delete post</button>` : ''}
+                  ${(currentUser && p.user_id !== currentUser.id) ? `<button type="button" class="report-post" role="menuitem" onclick="event.stopPropagation();reportTweet(${p.id})">⚑ Report post</button>` : ''}
+                </div>
               </div>
-              <button class="tweet-menu-btn" onclick="event.stopPropagation();openTweetMenu(event, ${p.id}, ${isOwner})">⋯</button>
             </div>
-            <div class="tweet-text">${linkHashtags(text)}</div>
+            ${text ? `<div class="tweet-text">${linkHashtags(text)}</div>` : ''}
+   onclick="event.stopPropagation();window.open('${escapeHtml(p.image_url)}','_blank','noopener')">` : ''}
             <div class="tweet-actions">
               <button class="tweet-action" onclick="event.stopPropagation();openPost(${p.id})"><span class="ico">💬</span>${replyCount > 0 ? replyCount : ''}</button>
               <button class="tweet-action repost ${reposted ? 'reposted' : ''}" onclick="event.stopPropagation();toggleTweetRepost(${p.id}, this)"><span class="ico">🔁</span>${repostCount > 0 ? repostCount : ''}</button>
@@ -1899,6 +2273,81 @@
         </div>
       </div>`;
     }).join('');
+  }
+
+  async function toggleFollowUser(userId) {
+    if (!currentUser) return alert('Please sign in to follow students.');
+    if (!userId || userId === currentUser.id) return;
+    const isFollowing = followingUserIds.includes(userId);
+    if (isFollowing) {
+      const { error } = await supabaseClient.from('follows').delete().eq('follower_id', currentUser.id).eq('following_id', userId);
+      if (error) return alert('Could not unfollow this student. Check your Supabase follows-table policies.');
+      followingUserIds = followingUserIds.filter(id => id !== userId);
+    } else {
+      const { error } = await supabaseClient.from('follows').insert({ follower_id: currentUser.id, following_id: userId });
+      if (error) return alert('Could not follow this student. Your Supabase project needs a follows table with the correct permissions.');
+      followingUserIds.push(userId);
+    }
+    renderTweets(currentFeedFilter);
+  }
+
+  function toggleTweetMenu(event, postId) {
+    event.stopPropagation();
+    const menu = document.getElementById('tweetMenu-' + postId);
+    if (!menu) return;
+    const willOpen = !menu.classList.contains('open');
+    document.querySelectorAll('.tweet-menu.open').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.tweet-menu-trigger[aria-expanded="true"]').forEach(el => el.setAttribute('aria-expanded', 'false'));
+    if (willOpen) {
+      menu.classList.add('open');
+      const trigger = menu.parentElement.querySelector('.tweet-menu-trigger');
+      if (trigger) trigger.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  document.addEventListener('click', function(event) {
+    if (!event.target.closest('.tweet-menu-wrap')) {
+      document.querySelectorAll('.tweet-menu.open').forEach(el => el.classList.remove('open'));
+      document.querySelectorAll('.tweet-menu-trigger[aria-expanded="true"]').forEach(el => el.setAttribute('aria-expanded', 'false'));
+    }
+  });
+
+  async function deleteTweet(postId) {
+    const post = allPosts.find(item => String(item.id) === String(postId));
+    if (!post) return alert('This post could not be found. Refresh the feed and try again.');
+    const canDelete = currentUser && post.user_id === currentUser.id;
+    if (!canDelete) return alert('You can only delete your own posts.');
+    if (!confirm('Delete this post? This cannot be undone.')) return;
+    const { error } = await supabaseClient.from('posts').delete().eq('id', postId);
+    if (error) {
+      alert('Could not delete this post. Check your Supabase delete policies. ' + error.message);
+      return;
+    }
+    allPosts = allPosts.filter(item => String(item.id) !== String(postId));
+    renderTweets(currentFeedFilter);
+  }
+
+  async function reportTweet(postId) {
+    if (!currentUser) return alert('Please sign in to report a post.');
+    const post = allPosts.find(item => String(item.id) === String(postId));
+    if (!post) return alert('This post could not be found. Refresh the feed and try again.');
+    if (post.user_id === currentUser.id) return alert('You cannot report your own post.');
+    const reason = prompt('Why are you reporting this post? (e.g. spam, harassment, inappropriate content)');
+    if (reason === null) return;
+    if (!reason.trim()) return alert('Please enter a reason for the report.');
+    const { error } = await supabaseClient.from('post_reports').insert({
+      post_id: postId,
+      reporter_id: currentUser.id,
+      reason: reason.trim().slice(0, 500)
+    });
+    if (error) {
+      console.error('Post report failed:', error);
+      alert('The report could not be submitted. Your Supabase project needs a post_reports table with the correct insert policy.');
+      return;
+    }
+    const menu = document.getElementById('tweetMenu-' + postId);
+    if (menu) menu.classList.remove('open');
+    alert('Thanks. Your report has been submitted for review.');
   }
 
   function toggleTweetLike(postId, btn) {
@@ -1926,7 +2375,23 @@
     }
   }
 
+  function switchMainFeed(feed) {
+    currentMainFeed = feed === 'following' ? 'following' : 'for-you';
+    document.getElementById('forYouTab').classList.toggle('active', currentMainFeed === 'for-you');
+    document.getElementById('forYouTab').setAttribute('aria-selected', String(currentMainFeed === 'for-you'));
+    document.getElementById('followingTab').classList.toggle('active', currentMainFeed === 'following');
+    document.getElementById('followingTab').setAttribute('aria-selected', String(currentMainFeed === 'following'));
+    currentFeedFilter = currentMainFeed === 'following' ? 'following' : 'all';
+    document.querySelectorAll('#trendingBar .trend-pill').forEach(btn => btn.classList.toggle('active', currentMainFeed === 'for-you' && btn.dataset.tag === 'all'));
+    renderTweets(currentFeedFilter);
+  }
+
   function filterFeed(tag) {
+    currentMainFeed = 'for-you';
+    document.getElementById('forYouTab').classList.add('active');
+    document.getElementById('forYouTab').setAttribute('aria-selected', 'true');
+    document.getElementById('followingTab').classList.remove('active');
+    document.getElementById('followingTab').setAttribute('aria-selected', 'false');
     currentFeedFilter = tag;
     document.querySelectorAll('#trendingBar .trend-pill').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.tag === tag);
@@ -1943,7 +2408,28 @@
     document.getElementById('composeText').value = '';
     document.getElementById('composeStatus').className = 'cm-status';
     document.getElementById('composeStatus').textContent = '';
+    removeComposeImage();
     updateComposeCount();
+  }
+  function previewComposeImage(event) {
+    const file = event.target.files && event.target.files[0];
+    const status = document.getElementById('composeStatus');
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { status.textContent = 'Choose an image file.'; status.className = 'cm-status err'; event.target.value = ''; return; }
+    if (file.size > 5 * 1024 * 1024) { status.textContent = 'Image must be 5 MB or smaller.'; status.className = 'cm-status err'; event.target.value = ''; return; }
+    document.getElementById('composeImagePreviewImg').src = URL.createObjectURL(file);
+    document.getElementById('composeImagePreview').style.display = 'block';
+    document.getElementById('composeImageHint').textContent = file.name;
+    status.className = 'cm-status'; status.textContent = '';
+  }
+  function removeComposeImage() {
+    const input = document.getElementById('composeImage');
+    const preview = document.getElementById('composeImagePreviewImg');
+    if (preview.src.startsWith('blob:')) URL.revokeObjectURL(preview.src);
+    input.value = '';
+    preview.removeAttribute('src');
+    document.getElementById('composeImagePreview').style.display = 'none';
+    document.getElementById('composeImageHint').textContent = 'Images up to 5 MB';
   }
   function updateComposeCount() {
     const val = document.getElementById('composeText').value;
@@ -1951,62 +2437,80 @@
     const countEl = document.getElementById('composeCount');
     countEl.textContent = len + '/280';
     countEl.classList.toggle('warn', len > 260);
-    document.getElementById('composePostBtn').disabled = len === 0 || len > 280;
+    document.getElementById('composePostBtn').disabled = (len === 0 && !(document.getElementById('composeImage').files || []).length) || len > 280;
   }
 
   async function submitTweet() {
     const text = document.getElementById('composeText').value.trim();
+    const imageFile = document.getElementById('composeImage').files[0] || null;
     const status = document.getElementById('composeStatus');
     const btn = document.getElementById('composePostBtn');
-    if (!text) { status.textContent = 'Write something first'; status.className = 'cm-status err'; return; }
+    if (!text && !imageFile) { status.textContent = 'Write something or add a photo first.'; status.className = 'cm-status err'; return; }
     if (text.length > 280) { status.textContent = 'Too long — max 280 characters'; status.className = 'cm-status err'; return; }
-
-    btn.disabled = true; btn.textContent = 'Posting...';
-    status.className = 'cm-status';
-
+    if (imageFile && (!imageFile.type.startsWith('image/') || imageFile.size > 5 * 1024 * 1024)) { status.textContent = 'Choose an image up to 5 MB.'; status.className = 'cm-status err'; return; }
+    btn.disabled = true; btn.textContent = 'Posting...'; status.className = 'cm-status';
     try {
-      const shortTitle = text.length > 80 ? text.slice(0, 77) + '...' : text;
-      const { error } = await supabaseClient.from('posts').insert({
-        user_id: currentUser.id,
-        author_name: currentProfile.full_name || 'Student',
-        category: 'General',
-        title: shortTitle,
-        body: text
-      });
-      if (error) throw error;
-      status.textContent = '✅ Posted!';
-      status.className = 'cm-status ok';
+      let imageUrl = null;
+      if (imageFile) {
+        status.textContent = 'Uploading photo...'; status.className = 'cm-status';
+        const ext = (imageFile.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '') || 'jpg';
+        const path = `${currentUser.id}/${Date.now()}.${ext}`;
+        const { error: imageError } = await supabaseClient.storage.from('post-images').upload(path, imageFile, { cacheControl: '3600', upsert: false, contentType: imageFile.type });
+        if (imageError) throw new Error('Photo upload failed. Check the post-images storage bucket and permissions. ' + imageError.message);
+        imageUrl = supabaseClient.storage.from('post-images').getPublicUrl(path).data.publicUrl;
+      }
+      status.textContent = 'Publishing post...';
+      const shortTitle = text.length > 80 ? text.slice(0, 77) + '...' : (text || 'Photo post');
+      const postData = { user_id: currentUser.id, author_name: currentProfile.full_name || 'Student', category: 'General', title: shortTitle, body: text || null };
+      if (imageUrl) postData.image_url = imageUrl;
+      const { error } = await supabaseClient.from('posts').insert(postData);
+      if (error) throw new Error(imageUrl && /image_url|column/i.test(error.message) ? 'Photo uploaded, but your posts table needs an image_url column. Run the setup SQL supplied with this file.' : error.message);
+      status.textContent = 'Posted!'; status.className = 'cm-status ok';
       setTimeout(() => { closeComposeModal(); loadPosts(); }, 600);
     } catch (err) {
-      status.textContent = '❌ ' + (err.message || 'Failed to post');
-      status.className = 'cm-status err';
+      status.textContent = '❌ ' + (err.message || 'Failed to post'); status.className = 'cm-status err';
     } finally {
-      btn.disabled = false; btn.textContent = 'Post';
+      btn.disabled = false; btn.textContent = 'Post'; updateComposeCount();
     }
   }
 
-  async function openPost(id) {
+ async function openPost(id) {
     currentPostId = id;
     showView('postDetailView');
+    
+    // 1. Fetch the post
     const { data: post } = await supabaseClient.from('posts').select('*').eq('id', id).maybeSingle();
     if (!post) return;
+    
     const name = post.author_name || 'Student';
     const handle = makeHandle(name);
-    const initial = name.charAt(0).toUpperCase();
     const text = getTweetText(post);
     const liked = hasReaction(post.id, 'like');
     const reposted = hasReaction(post.id, 'repost');
 
+    // 2. Fetch the author's profile picture
+    let authorProfile = (window.uniBuzzAuthorProfiles || {})[post.user_id] || {};
+    if (post.user_id && !authorProfile.avatar_url) {
+        const { data: p } = await supabaseClient.from('profiles').select('avatar_url').eq('id', post.user_id).maybeSingle();
+        if (p) authorProfile = p;
+    }
+    const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=FFD700&color=000&bold=true`;
+    const avatarMarkup = authorProfile.avatar_url 
+        ? `<img src="${escapeHtml(authorProfile.avatar_url)}" alt="" onerror="this.onerror=null;this.src='${fallbackAvatar}';">` 
+        : `<img src="${fallbackAvatar}" alt="">`;
+
+    // 3. Render the main tweet
     document.getElementById('postDetailHeader').innerHTML = `
       <div class="thread-tweet">
         <div class="tweet-top">
-          <div class="tweet-avatar">${initial}</div>
+          <div class="tweet-avatar">${avatarMarkup}</div>
           <div class="tweet-main">
             <div class="tweet-header">
               <span class="tweet-name">${escapeHtml(name)}</span>
               <span class="tweet-handle">${handle}</span>
             </div>
             <div class="tweet-text" style="margin-top:6px;">${linkHashtags(text)}</div>
+            
             <div class="tweet-meta-row">${new Date(post.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</div>
             <div class="thread-actions">
               <button class="tweet-action repost ${reposted ? 'reposted' : ''}" onclick="toggleThreadRepost(${post.id}, this)"><span class="ico">🔁</span> Repost</button>
@@ -2017,6 +2521,8 @@
         </div>
       </div>
     `;
+    
+    // 4. Load the replies below it
     loadReplies(id);
   }
 
@@ -2031,21 +2537,40 @@
     btn.classList.toggle('reposted', active);
   }
 
-  async function loadReplies(postId) {
+async function loadReplies(postId) {
     const list = document.getElementById('repliesList');
     list.innerHTML = `<div class="empty" style="padding:20px;">Loading replies...</div>`;
+    
+    // 1. Get the replies
     const { data, error } = await supabaseClient.from('replies').select('*').eq('post_id', postId).order('created_at', { ascending: true });
+    
     if (error || !data || data.length === 0) {
       list.innerHTML = `<div class="empty" style="padding:24px 20px;"><div class="icon" style="font-size:2rem;">💬</div><p style="font-size:0.85rem;">No replies yet. Be the first!</p></div>`;
       return;
     }
+
+    // 2. Fetch profile pictures for everyone who replied
+    const replyAuthorIds = [...new Set(data.map(r => r.user_id).filter(Boolean))];
+    let replyProfiles = {};
+    if (replyAuthorIds.length) {
+        const { data: profiles } = await supabaseClient.from('profiles').select('id,avatar_url').in('id', replyAuthorIds);
+        (profiles || []).forEach(p => { replyProfiles[p.id] = p; });
+    }
+
+    // 3. Render the replies
     list.innerHTML = data.map(r => {
       const name = r.author_name || 'Student';
       const handle = makeHandle(name);
-      const initial = name.charAt(0).toUpperCase();
       const time = timeAgo(r.created_at);
+      
+      const authorProf = replyProfiles[r.user_id] || {};
+      const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=FFD700&color=000&bold=true`;
+      const avatarMarkup = authorProf.avatar_url 
+          ? `<img src="${escapeHtml(authorProf.avatar_url)}" alt="" onerror="this.onerror=null;this.src='${fallbackAvatar}';">` 
+          : `<img src="${fallbackAvatar}" alt="">`;
+
       return `<div class="reply-item">
-        <div class="reply-avatar">${initial}</div>
+        <div class="reply-avatar">${avatarMarkup}</div>
         <div class="reply-main">
           <div class="reply-top">
             <span class="reply-author">${escapeHtml(name)}</span>
@@ -2068,159 +2593,6 @@
     } catch (err) { alert('Failed: ' + err.message); }
   }
 
-  function openTweetMenu(event, postId, isOwner) {
-    event.stopPropagation();
-    closeTweetMenu();
-    const btn = event.currentTarget;
-    const rect = btn.getBoundingClientRect();
-    const popup = document.createElement('div');
-    popup.className = 'tweet-menu-popup';
-    popup.style.top = (rect.bottom + window.scrollY + 4) + 'px';
-    popup.style.position = 'absolute';
-    let html = '';
-    if (isOwner) {
-      html += `<button class="danger" onclick="event.stopPropagation();deleteTweet(${postId})"><span>🗑</span> Delete post</button>`;
-    } else {
-      html += `<button class="danger" onclick="event.stopPropagation();openReportModal(${postId})"><span>🚩</span> Report post</button>`;
-    }
-    popup.innerHTML = html;
-    document.body.appendChild(popup);
-    activeTweetMenu = popup;
-    setTimeout(() => { document.addEventListener('click', closeTweetMenuOnClick); }, 10);
-  }
-  function closeTweetMenu() {
-    if (activeTweetMenu) {
-      activeTweetMenu.remove();
-      activeTweetMenu = null;
-      document.removeEventListener('click', closeTweetMenuOnClick);
-    }
-  }
-  function closeTweetMenuOnClick(e) {
-    if (activeTweetMenu && !activeTweetMenu.contains(e.target)) closeTweetMenu();
-  }
-  async function deleteTweet(postId) {
-    closeTweetMenu();
-    if (!confirm('Delete this post? This cannot be undone.')) return;
-    try {
-      await supabaseClient.from('replies').delete().eq('post_id', postId);
-      const { error } = await supabaseClient.from('posts').delete().eq('id', postId);
-      if (error) throw error;
-      allPosts = allPosts.filter(p => p.id !== postId);
-      renderTweets(currentFeedFilter);
-    } catch (err) {
-      alert('Failed to delete: ' + (err.message || 'Unknown error'));
-    }
-  }
-
-  function openReportModal(postId) {
-    closeTweetMenu();
-    reportPostId = postId;
-    reportReason = null;
-    document.getElementById('reportNote').value = '';
-    document.getElementById('reportStatus').style.display = 'none';
-    document.getElementById('reportSubmitBtn').disabled = true;
-    document.querySelectorAll('.report-reason-btn').forEach(b => b.classList.remove('selected'));
-    document.getElementById('reportModal').classList.add('show');
-  }
-  function closeReportModal() {
-    document.getElementById('reportModal').classList.remove('show');
-    reportPostId = null;
-    reportReason = null;
-  }
-  function selectReportReason(reason) {
-    reportReason = reason;
-    document.querySelectorAll('.report-reason-btn').forEach(b => {
-      b.classList.toggle('selected', b.dataset.reason === reason);
-    });
-    document.getElementById('reportSubmitBtn').disabled = false;
-  }
-  async function submitReport() {
-    if (!reportReason || !reportPostId) return;
-    const btn = document.getElementById('reportSubmitBtn');
-    const status = document.getElementById('reportStatus');
-    btn.disabled = true;
-    btn.textContent = 'Submitting...';
-    try {
-      const { error } = await supabaseClient.from('reports').insert({
-        post_id: reportPostId,
-        reporter_id: currentUser.id,
-        reporter_name: currentProfile.full_name || 'Student',
-        reason: reportReason,
-        note: document.getElementById('reportNote').value.trim() || null,
-        status: 'pending'
-      });
-      if (error) throw error;
-      status.textContent = '✅ Report submitted. Thanks for helping keep UniBuzz safe!';
-      status.style.cssText = 'text-align:center;padding:10px;font-size:0.85rem;margin-bottom:10px;border-radius:10px;background:rgba(80,220,120,0.15);color:#4ade80;display:block;';
-      setTimeout(() => { closeReportModal(); }, 1400);
-    } catch (err) {
-      status.textContent = '❌ ' + (err.message || 'Failed to submit report');
-      status.style.cssText = 'text-align:center;padding:10px;font-size:0.85rem;margin-bottom:10px;border-radius:10px;background:rgba(255,60,60,0.15);color:#ff6b6b;display:block;';
-      btn.disabled = false;
-      btn.textContent = 'Submit Report';
-    }
-  }
-
-  function switchAdminReports(tab) {
-    currentAdminReportTab = tab;
-    document.getElementById('toggleReportPending').classList.toggle('active', tab === 'pending');
-    document.getElementById('toggleReportResolved').classList.toggle('active', tab === 'resolved');
-    loadAdminReports();
-  }
-  async function loadAdminReports() {
-    const list = document.getElementById('adminReportsList');
-    list.innerHTML = `<div class="empty">Loading...</div>`;
-    let query = supabaseClient.from('reports').select('*').order('created_at', { ascending: false });
-    if (currentAdminReportTab === 'pending') query = query.eq('status', 'pending');
-    if (currentAdminReportTab === 'resolved') query = query.eq('status', 'resolved');
-    const { data, error } = await query;
-    if (error || !data || data.length === 0) {
-      const msg = currentAdminReportTab === 'pending' ? 'No pending reports. All clear! ✅' : 'No resolved reports yet.';
-      list.innerHTML = `<div class="empty"><div class="icon">✨</div><p>${msg}</p></div>`;
-      return;
-    }
-    const postIds = [...new Set(data.map(r => r.post_id).filter(Boolean))];
-    let postsMap = {};
-    if (postIds.length > 0) {
-      const { data: posts } = await supabaseClient.from('posts').select('id, body, title, author_name').in('id', postIds);
-      if (posts) posts.forEach(p => { postsMap[p.id] = p; });
-    }
-    list.innerHTML = data.map(r => {
-      const post = postsMap[r.post_id];
-      const postText = post ? ((post.body && post.body.trim()) ? post.body : (post.title || '(empty)')) : '(post deleted)';
-      const date = new Date(r.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-      const isResolved = r.status === 'resolved';
-      return `<div class="report-admin-card ${isResolved ? 'resolved' : ''}">
-        <span class="ra-reason">${escapeHtml(r.reason)}</span>
-        <div class="ra-post">${escapeHtml(postText).slice(0, 200)}</div>
-        <div class="ra-meta">
-          👤 ${escapeHtml(r.reporter_name || 'Anonymous')} · 📅 ${date}<br>
-          ${post ? '✍️ Post by ' + escapeHtml(post.author_name || 'Student') : ''}
-          ${r.note ? '<br>💬 "' + escapeHtml(r.note) + '"' : ''}
-        </div>
-        <div class="ra-actions">
-          ${!isResolved && post ? `<button class="admin-btn approve" onclick="resolveReport(${r.id}, false, ${r.post_id})">🗑 Delete Post</buttonaterials>` : ''}
-          ${!isResolved ? `<button class').="admin-btn reject" onclick="resolveReportupdate(${r.id}, true)">✅ Dismiss</({button>` : ''}
-          ${isResolved status ? `<span style="font-size:0.72rem;color:#:4ade80;font-weight:600;">✅ Resolved</span>` : ''}
-        </div>
-      </div>`;
-    }).join('');
-  }
-  async function resolveReport(reportId, dismiss, postId) {
-    if (postId && !dismiss) {
-      if (!confirm('Delete the reported post? This cannot be undone.')) return;
-      try {
-        await supabaseClient.from('replies').delete().eq('post_id', postId);
-        await supabaseClient.from('posts').delete().eq('id', postId);
-      } catch (err) {
-        console.error('Delete post failed:', err);
- '      }
-    }
-    const { error } = await supabaseClientapproved.from('reports').update({ status: 'resolved'' }).eq('id', reportId);
-    if }). (error) { alert('Error: ' + erroreq.message); return; }
-    loadAdminReports();
-('  }
-
   async function loadAdminMaterials() {
     const list = document.getElementById('adminList');
     list.innerHTML = `<div class="empty">Loading...</div>`;
@@ -2240,7 +2612,7 @@
   }
   async function approveMaterial(id) {
     if (!confirm('Approve this material?')) return;
-    const { error } = await supabaseClient.from('mid', id);
+    const { error } = await supabaseClient.from('materials').update({ status: 'approved' }).eq('id', id);
     if (error) { alert('Error: ' + error.message); return; }
     loadAdminMaterials();
   }
@@ -2296,8 +2668,8 @@
     const status = document.getElementById('uploadStatus');
     const btn = document.getElementById('uploadSubmitBtn');
 
-    const errStyle = 'text-align:center;padding:10px;font-size:0.85rem;margin-top:10px;border-radius:10px;background:rgba(255,60,60,0.15);color:# read"ff6b6b;display:block; on';
-    const okStyle  = 'text-align: publiccenter;padding:10px;font-size:0.re.85rem;margin-top:10px;border-radiusports:10px;background:rgba(80,220,120,0.15);color:#4ade80;display:block;';
+    const errStyle = 'text-align:center;padding:10px;font-size:0.85rem;margin-top:10px;border-radius:10px;background:rgba(255,60,60,0.15);color:#ff6b6b;display:block;';
+    const okStyle  = 'text-align:center;padding:10px;font-size:0.85rem;margin-top:10px;border-radius:10px;background:rgba(80,220,120,0.15);color:#4ade80;display:block;';
     const waitStyle = 'text-align:center;padding:10px;font-size:0.85rem;margin-top:10px;border-radius:10px;background:rgba(255,215,0,0.12);color:#FFD700;display:block;';
 
     if (!title || !course || !file) {
@@ -2360,5 +2732,7 @@
     document.getElementById('loadingScreen').innerHTML = '<div style="padding:20px;text-align:center;color:#ff6b6b;font-size:0.85rem;">Load error:<br><br>' + (err.message || err) + '</div>';
   }
 </script>
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
 </body>
 </html>

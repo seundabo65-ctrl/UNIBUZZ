@@ -90,7 +90,6 @@
   .review-block .rv-label { font-size: 0.7rem; color: #FFD700; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
   .review-block .rv-value { font-size: 0.9rem; color: #fff; line-height: 1.4; }
 
-  /* ===== STICKY FORM NAV ===== */
   .form-nav {
     display: flex;
     gap: 10px;
@@ -220,6 +219,7 @@
             <option value="Food">🍲 Food</option>
             <option value="Laundry">🧺 Laundry</option>
             <option value="Printing">🖨️ Printing</option>
+            <option value="Gadgets">💻 Gadgets</option>
             <option value="Accommodation">🏠 Accommodation</option>
             <option value="Transport">🚌 Transport</option>
           </select>
@@ -319,7 +319,6 @@
   <div class="tagline">UniBuzz — Know the Buzz</div>
 </div>
 
-<!-- STICKY NAV — always visible -->
 <div class="form-nav">
   <button class="btn btn-secondary" id="prevBtn" onclick="prevStep()" style="display:none;">← Back</button>
   <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">
@@ -336,16 +335,13 @@
   let currentUser = null;
   let currentStep = 1;
   let uploadedImageFile = null;
+  let authHandled = false;
 
-  async function init() {
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (!session) { window.location.href = 'index.html'; return; }
-    currentUser = session.user;
-
+  async function loadVendorData() {
     const { data: vendor } = await supabaseClient
       .from('vendors').select('*').eq('user_id', currentUser.id).maybeSingle();
 
-    if (vendor && vendor.business_name && vendor.business_name !== 'My Business') {
+    if (vendor && vendor.business_name) {
       document.getElementById('bizName').value = vendor.business_name || '';
       document.getElementById('bizCategory').value = vendor.category || '';
       document.getElementById('bizPhone').value = vendor.contact || '';
@@ -355,6 +351,29 @@
     }
 
     document.getElementById('loadingScreen').style.display = 'none';
+  }
+
+  function handleSession(session) {
+    if (authHandled) return;
+    authHandled = true;
+    if (!session) { window.location.href = 'index.html'; return; }
+    currentUser = session.user;
+    loadVendorData();
+  }
+
+  function init() {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        handleSession(session);
+      }
+    });
+
+    // Fallback if onAuthStateChange never fires
+    setTimeout(async () => {
+      if (authHandled) return;
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      handleSession(session);
+    }, 1200);
   }
 
   function goToStep(step) {
@@ -370,11 +389,7 @@
 
     document.getElementById('prevBtn').style.display = step === 1 ? 'none' : 'flex';
     const nextBtnText = document.getElementById('nextBtnText');
-    if (step === 4) {
-      nextBtnText.textContent = 'Submit Registration';
-    } else {
-      nextBtnText.textContent = 'Next Step';
-    }
+    nextBtnText.textContent = step === 4 ? 'Submit Registration' : 'Next Step';
 
     if (step === 4) populateReview();
 
